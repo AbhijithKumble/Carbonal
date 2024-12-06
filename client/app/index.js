@@ -7,8 +7,7 @@ const Page = () => {
       <View style={styles.main}>
         <Text style={styles.title}>Hello World</Text>
         <Link href="/sign-in">Sign In</Link>
-        <Link href="/sign-out">Sign Out</Link>
-        <Link href="/sign">Sign Out</Link>
+        <Link href="/sign-up">Sign Up</Link>
       </View>
     </View>
   );
@@ -37,3 +36,4 @@ const styles = StyleSheet.create({
     color: "#38434D",
   },
 });
+
