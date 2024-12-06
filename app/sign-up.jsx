@@ -2,26 +2,26 @@ import React from "react";
 import { Text, View, TextInput, Button, StyleSheet, Alert } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 
-const SignIn = () => {
-  const { control, handleSubmit, formState: { errors } } = useForm({
+const SignUp = () => {
+  const { control, handleSubmit, watch, formState: { errors } } = useForm({
     defaultValues: {
       email: "",
       password: "",
+      confirmPassword: "",
     },
   });
 
   const onSubmit = (data) => {
-    if(data.email && data.password) {
-      Alert.alert("Sign In Successful", `Email: ${data.email}`);
-    }else {
-      Alert.alert("data is empty")
-    }
+    Alert.alert("Sign Up Successful", `Welcome, ${data.email}!`);
   };
+
+  const password = watch("password");
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Sign In</Text>
+      <Text style={styles.header}>Sign Up</Text>
 
+      {/* Email Field */}
       <Controller
         control={control}
         name="email"
@@ -44,6 +44,7 @@ const SignIn = () => {
       />
       {errors.email && <Text style={styles.errorText}>{errors.email.message}</Text>}
 
+      {/* Password Field */}
       <Controller
         control={control}
         name="password"
@@ -67,7 +68,31 @@ const SignIn = () => {
       />
       {errors.password && <Text style={styles.errorText}>{errors.password.message}</Text>}
 
-      <Button title="Sign In" onPress={handleSubmit(onSubmit)} />
+      {/* Confirm Password Field */}
+      <Controller
+        control={control}
+        name="confirmPassword"
+        rules={{
+          required: "Please confirm your password.",
+          validate: (value) =>
+            value === password || "Passwords do not match.",
+        }}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <TextInput
+            style={[styles.input, errors.confirmPassword && styles.errorInput]}
+            placeholder="Confirm Password"
+            secureTextEntry
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+          />
+        )}
+      />
+      {errors.confirmPassword && (
+        <Text style={styles.errorText}>{errors.confirmPassword.message}</Text>
+      )}
+
+      <Button title="Sign Up" onPress={handleSubmit(onSubmit)} />
     </View>
   );
 };
@@ -102,4 +127,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignIn;
+export default SignUp;
