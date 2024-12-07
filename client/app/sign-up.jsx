@@ -1,6 +1,7 @@
 import React from "react";
 import { Text, View, TextInput, Button, StyleSheet, Alert } from "react-native";
 import { useForm, Controller } from "react-hook-form";
+import axios from "axios";
 
 const SignUp = () => {
   const { control, handleSubmit, watch, formState: { errors } } = useForm({
@@ -11,10 +12,33 @@ const SignUp = () => {
     },
   });
 
-  const onSubmit = (data) => {
-    Alert.alert("Sign Up Successful", `Welcome, ${data.email}!`);
-  };
+ const onSubmit = async (data) => {
+    console.log("clicked sign up", data)
+    setLoading(true); // Start loading
+    if (data.email && data.password) {
+      try {
+        const response = await axios.post("http://localhost:3000/signup", {
+          email: data.email,
+          password: data.password,
+        });
 
+        // Check if the response has a token
+        if (response.data.token) {
+          // Store the token (e.g., in AsyncStorage, Context, or Redux)
+          Alert.alert("Sign In Successful", `Token: ${response.data.token}`);
+          reset(); // Reset form fields after successful submission
+        } else {
+          Alert.alert("Error", "Failed to sign in. Please try again.");
+        }
+      } catch (error) {
+        setLoading(false); // Stop loading
+        Alert.alert("Error", "Something went wrong. Please try again.");
+      }
+    } else {
+      setLoading(false); // Stop loading
+      Alert.alert("Error", "Please provide both email and password.");
+    }
+  };
   const password = watch("password");
 
   return (
