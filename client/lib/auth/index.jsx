@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
-import { createSelectors } from '../utils';
-import { getToken, removeToken, setToken } from './utils';
+import { createSelectors } from '../../utils/util'
+import { getToken, removeToken, setToken } from '../../utils/util';
 
 /*
 interface AuthState {
@@ -13,7 +13,7 @@ interface AuthState {
 }
 */
 
-const _useAuth = create<AuthState>((set, get) => ({
+const _useAuth = create < AuthState > ((set, get) => ({
   status: 'idle',
   token: null,
   signIn: (token) => {
