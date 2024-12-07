@@ -1,22 +1,51 @@
-const createSelectors = (fn) => {
-  return {
-    useAuth: () => use(fn.auth),
-    useToken: () => use(fn.token),
-  };
+// utils/util.js
+
+/**
+ * Create selectors for Zustand store
+ * @param {Function} store - Zustand store
+ * @returns {Object} - Object with selectors
+ */
+export const createSelectors = (store) => {
+  const selectors = {};
+  for (const key of Object.keys(store.getState())) {
+    selectors[key] = () => store((state) => state[key]);
+  }
+  return selectors;
 };
 
-export const useAuth = createSelectors((state) => state.auth);
+/**
+ * Retrieve the token from localStorage
+ * @returns {string | null} - Token or null if not found
+ */
+export const getToken = () => {
+  try {
+    return localStorage.getItem('auth_token');
+  } catch (error) {
+    console.error("Error getting token from localStorage:", error);
+    return null;
+  }
+};
 
-export function setToken(token) {
-  localStorage.setItem('authToken', JSON.stringify(token));
-}
+/**
+ * Save the token to localStorage
+ * @param {string} token - Token to be stored
+ */
+export const setToken = (token) => {
+  try {
+    localStorage.setItem('auth_token', token);
+  } catch (error) {
+    console.error("Error saving token to localStorage:", error);
+  }
+};
 
-export function getToken() {
-  const token = localStorage.getItem('authToken');
-  return token ? JSON.parse(token) : null;
-}
-
-export function removeToken() {
-  localStorage.removeItem('authToken');
-}
+/**
+ * Remove the token from localStorage
+ */
+export const removeToken = () => {
+  try {
+    localStorage.removeItem('auth_token');
+  } catch (error) {
+    console.error("Error removing token from localStorage:", error);
+  }
+};
 

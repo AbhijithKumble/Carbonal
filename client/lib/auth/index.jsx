@@ -1,19 +1,7 @@
 import { create } from 'zustand';
+import { createSelectors, getToken, removeToken, setToken } from './utils/util';
 
-import { createSelectors } from '../../utils/util'
-import { getToken, removeToken, setToken } from '../../utils/util';
-
-/*
-interface AuthState {
-  token: TokenType | null;
-  status: 'idle' | 'signOut' | 'signIn';
-  signIn: (data: TokenType) => void;
-  signOut: () => void;
-  hydrate: () => void;
-}
-*/
-
-const _useAuth = create < AuthState > ((set, get) => ({
+const _useAuth = create((set, get) => ({
   status: 'idle',
   token: null,
   signIn: (token) => {
@@ -33,14 +21,13 @@ const _useAuth = create < AuthState > ((set, get) => ({
         get().signOut();
       }
     } catch (_e) {
-      // catch error here
-      // Maybe sign_out user!
+      console.error("Error hydrating auth state:", _e);
     }
   },
 }));
 
 export const useAuth = createSelectors(_useAuth);
-
 export const signOut = () => _useAuth.getState().signOut();
 export const signIn = (token) => _useAuth.getState().signIn(token);
 export const hydrateAuth = () => _useAuth.getState().hydrate();
+
