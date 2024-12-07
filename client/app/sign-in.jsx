@@ -10,13 +10,38 @@ const SignIn = () => {
     },
   });
 
-  const onSubmit = (data) => {
-    if(data.email && data.password) {
-      Alert.alert("Sign In Successful", `Email: ${data.email}`);
-    }else {
-      Alert.alert("data is empty")
+
+  const onSubmit = async (data) => {
+    setLoading(true); // Start loading
+    if (data.email && data.password) {
+      try {
+        const response = await axios.post("http://localhost:3000/signin", {
+          email: data.email,
+          password: data.password,
+        });
+
+        // Check if the response has a token
+        if (response.data.token) {
+          // Store the token (e.g., in AsyncStorage, Context, or Redux)
+          Alert.alert("Sign In Successful", `Token: ${response.data.token}`);
+          reset(); // Reset form fields after successful submission
+        } else {
+          Alert.alert("Error", "Failed to sign in. Please try again.");
+        }
+      } catch (error) {
+        setLoading(false); // Stop loading
+        Alert.alert("Error", "Something went wrong. Please try again.");
+      }
+    } else {
+      setLoading(false); // Stop loading
+      Alert.alert("Error", "Please provide both email and password.");
     }
   };
+/*
+  const handleError = () => {
+    Alert.alert("Form Error", "Please fill in all fields correctly.");
+  };
+*/
 
   return (
     <View style={styles.container}>
