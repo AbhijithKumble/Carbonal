@@ -1,11 +1,16 @@
 import { Link } from "expo-router";
-import { StyleSheet, Text, View } from "react-native";
-
+import { navigate } from "expo-router/build/global-state/routing";
+import { Button, StyleSheet, Text, View } from "react-native";
+import { router } from "expo-router";
 const Page = () => {
   return (
     <View style={styles.container}>
       <View style={styles.main}>
         <Text style={styles.title}>Hello World</Text>
+        <Button
+        title="Go to (app) Index"
+        onPress={() => router.push("/(app)")}
+      />
         <Link href="/sign-in">Sign In</Link>
         <Link href="/sign-up">Sign Up</Link>
       </View>
