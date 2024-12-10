@@ -25,11 +25,11 @@ export default Welcome
 const styles = StyleSheet.create({
     box:{
         width: "90%",
-        height:150,
+        height:170,
         backgroundColor: "#a6bdb5",
         
         alignItems: "center",
-        marginTop:70,
+        marginTop:0,
         marginHorizontal:20,
         borderRadius: 26,
     },

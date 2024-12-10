@@ -34,7 +34,14 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
-      ]
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow Carbonal to use your location."
+        }
+      ],
+      "expo-font"
     ],
     "experiments": {
       "typedRoutes": true
