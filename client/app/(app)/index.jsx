@@ -1,12 +1,168 @@
-import { Text, View } from "react-native";
+import { Stack } from "expo-router";
+import React from "react";
+import { SafeAreaView,StyleSheet, View, Text, Pressable, Image, ImageBackground } from "react-native";
+import Welcome from './welcome';
+import Locationreact from './locations';
+import Profile from "./profile";
+import Leaderboard from "./leaderboard";
+
 
 const Index = () => {
-  
+  const handlePress = (buttonNumber) => {
+    console.log(`Button ${buttonNumber} pressed`);
+  };
+
   return (
-    <View>
-      <Text>This is home</Text>
-    </View>
+    
+    
+    <ImageBackground
+      source={require("../../assets/images/leavesdark.jpeg")} // Replace with your background image
+      style={styles.background}
+      resizeMode="cover"
+    >
+      <SafeAreaView>
+      <Leaderboard/>
+      <Profile/>
+      <Locationreact/>
+      <View style={styles.container}>
+    
+        <Welcome/>
+    
+        <View style={styles.row1}>
+          <Pressable style={styles.box} onPress={() => handlePress(1)}>
+            <Image
+              source={require("../../assets/images/footprint.jpeg")} // Replace with your image path
+              style={styles.image}
+            />
+            <Text style={styles.buttonText}>FOOTPRINT</Text>
+          </Pressable>
+          <Pressable style={styles.box} onPress={() => handlePress(2)}>
+            <Image
+              source={require("../../assets/images/quicktip.png")} // Replace with your image path
+              style={styles.image2}
+            />
+            <Text style={styles.buttonTexttips}>TIPS</Text>
+          </Pressable>
+        </View>
+        <View style={styles.row2}>
+          <Pressable style={styles.box} onPress={() => handlePress(3)}>
+            <Image
+              source={require("../../assets/images/challenges.jpeg")} // Replace with your image path
+              style={styles.image}
+            />
+            <Text style={styles.buttonTextchallenge}>CHALLENGES</Text>
+          </Pressable>
+          <Pressable style={styles.box} onPress={() => handlePress(4)}>
+            <Image
+              source={require("../../assets/images/progress.jpeg")} // Replace with your image path
+              style={styles.image}
+            />
+            <Text style={styles.buttonText}>PROGRESS</Text>
+          </Pressable>
+        </View>
+      </View>
+      </SafeAreaView>
+    </ImageBackground>
+    
   );
 };
 
 export default Index;
+
+const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+    
+  },
+  container: {
+    flex: 1,
+
+    backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent overlay
+  },
+  row1: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginTop:180,
+    
+   
+  },
+  row2: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    
+  
+    marginTop:170,
+    
+  },
+  box: {
+    width: 160,
+    maxWidth: "width" * 0.9,
+    height: 160,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(255, 255, 255, 0.9)", 
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 5,
+  },
+  image: {
+    width:160,
+    maxWidth: "width" * 0.9,
+    height: 160,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    elevation: 5,
+    
+   
+  },
+  image2: {
+    width:160,
+    maxWidth: "width" * 0.9,
+    height: 160,
+    justifyContent: "center",
+    alignItems: "center",
+    
+    borderRadius: 10,
+ 
+    elevation: 5,
+  },  
+  buttonText: {
+    position: "absolute",
+    top: "110%",
+    left: "40%",
+    transform: [{ translateX: -50 }, { translateY: -50 }], // Centers the text
+    color: "#fff",
+    fontSize: 28,
+    
+    textAlign: "center",
+    fontFamily:'Blimps',
+  },
+  buttonTexttips: {
+    position: "absolute",
+    top: "110%",
+    left: "65%",
+    transform: [{ translateX: -50 }, { translateY: -50 }], // Centers the text
+    color: "#fff",
+    fontSize: 28,
+    
+    textAlign: "center",
+    fontFamily:'Blimps',
+  },
+  buttonTextchallenge: {
+    position: "absolute",
+    top: "110%",
+    left: "35%",
+    transform: [{ translateX: -50 }, { translateY: -50 }], // Centers the text
+    color: "#fff",
+    fontSize: 28,
+    
+    textAlign: "center",
+    fontFamily:'Blimps',
+  },
+});

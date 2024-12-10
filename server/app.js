@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import cors from 'cors';
 
 dotenv.config();
 
@@ -12,6 +13,7 @@ const PORT = 3000;
 
 // Middleware
 app.use(bodyParser.json());
+app.use(cors());
 
 // MongoDB connection
 const getUri = () => {
@@ -63,7 +65,8 @@ const SECRET_KEY = 'your_secret_key';
 // Route: Register a new user
 app.post('/signup', async (req, res) => {
   const { email, password } = req.body;
-  if (!username || !password) {
+  console.log(email, password)
+  if (!email || !password) {
     return res.status(400).json({ message: 'Username and password are required.' });
   }
 
