@@ -21,7 +21,11 @@ const AppLayout = () => {
     return <Redirect href="/sign-in" />;
   }
   return (
-      <Stack />
+    <Stack
+      screenOptions={{
+        headerShown: false, // Disables the header for all child routes
+      }}
+    />
   );
 };
 
