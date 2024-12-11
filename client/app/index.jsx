@@ -1,5 +1,4 @@
 import { Link } from "expo-router";
-import { navigate } from "expo-router/build/global-state/routing";
 import { Button, StyleSheet, Text, View } from "react-native";
 import { router } from "expo-router";
 const Page = () => {
