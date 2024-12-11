@@ -1,13 +1,50 @@
-import { Text, View } from "react-native";
+import { StyleSheet, Text, TextInput, View } from 'react-native';
 
-const Travel = () => {
+const Travel = ({
+  kmsPerYear, setKmsPerYear
+}) => {
 
   return (
-    <View>
-      <Text>This is food calc</Text>
+    <View style={styles.container}>
+      <Text style={styles.heading}>Travel</Text>
+      <View style={styles.textInputContainer}>
+        <Text style={styles.textInput}>Kilometers Traveled per Year</Text>
+        <TextInput
+          style={styles.placeholderInput}
+          keyboardType="numeric"
+          value={kmsPerYear}
+          onChangeText={setKmsPerYear}
+        />
+      </View>
     </View>
   );
 };
 
-export default Travel;
+const styles = StyleSheet.create({
+  container: {
+    // ... other container styles from Location component
+  },
+  heading: {
+    fontFamily: 'Blimps',
+    fontSize: 30,
+    textAlign: 'center',
+  },
+  textInputContainer: {
+    padding: 10,
+  },
+  textInput: {
+    fontFamily: 'Blimps',
+    fontSize: 20,
+    textAlign: 'left',
+  },
+  placeholderInput: {
+    backgroundColor: '#ddf5ed',
+    fontFamily: 'Blimps',
+    fontSize: 15,
+    textAlign: 'left',
+    paddingLeft: 10,
+    borderRadius: 20,
+  },
+});
 
+export default Travel;
