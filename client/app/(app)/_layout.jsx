@@ -3,7 +3,7 @@ import { useAuth } from "../../lib/auth";
 import { useCallback, useEffect } from "react";
 
 const AppLayout = () => {
-  const status = useAuth.use.status();
+  const status = 'signIn' || useAuth.use.status();
 
     const hideSplash = useCallback(async () => {
     await SplashScreen.hideAsync();

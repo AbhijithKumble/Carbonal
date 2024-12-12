@@ -1,4 +1,4 @@
-import { Stack } from "expo-router";
+import { Link, Stack } from "expo-router";
 import React from "react";
 import { SafeAreaView,StyleSheet, View, Text, Pressable, Image, ImageBackground } from "react-native";
 import Welcome from './welcome';
@@ -8,6 +8,7 @@ import Leaderboard from "./leaderboard";
 
 
 const Index = () => {
+
   const handlePress = (buttonNumber) => {
     console.log(`Button ${buttonNumber} pressed`);
   };
@@ -29,6 +30,7 @@ const Index = () => {
         <Welcome/>
     
         <View style={styles.row1}>
+          <Link href="./(footprint)" asChild>
           <Pressable style={styles.box} onPress={() => handlePress(1)}>
             <Image
               source={require("../../assets/images/footprint.jpeg")} // Replace with your image path
@@ -36,6 +38,8 @@ const Index = () => {
             />
             <Text style={styles.buttonText}>FOOTPRINT</Text>
           </Pressable>
+          </Link>
+
           <Pressable style={styles.box} onPress={() => handlePress(2)}>
             <Image
               source={require("../../assets/images/quicktip.png")} // Replace with your image path
