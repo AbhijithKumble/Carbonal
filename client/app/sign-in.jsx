@@ -2,6 +2,9 @@ import React from "react";
 import { Text, View, TextInput, Button, StyleSheet, Alert } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 
+import { router } from "expo-router";
+import { FontAwesome5 } from '@expo/vector-icons';
+import axios from 'axios';
 const SignIn = () => {
   const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
@@ -10,39 +13,34 @@ const SignIn = () => {
     },
   });
 
-
   const onSubmit = async (data) => {
-    setLoading(true); // Start loading
-    if (data.email && data.password) {
-      try {
-        const response = await axios.post("http://localhost:3000/signin", {
-          email: data.email,
-          password: data.password,
-        });
-
-        // Check if the response has a token
-        if (response.data.token) {
-          // Store the token (e.g., in AsyncStorage, Context, or Redux)
-          Alert.alert("Sign In Successful", `Token: ${response.data.token}`);
-          reset(); // Reset form fields after successful submission
-        } else {
-          Alert.alert("Error", "Failed to sign in. Please try again.");
-        }
-      } catch (error) {
-        setLoading(false); // Stop loading
-        Alert.alert("Error", "Something went wrong. Please try again.");
+    try {
+      const response = await axios.post("http://192.168.0.104:3000/signin", data);
+  
+      console.log("Server Response:", response.data);
+  
+      if (response.data.token) {
+        Alert.alert("Sign Up Successful", "You are now signed in!");
+        router.push("/(app)");
+      } else if(response.data.data==="User already present"){
+        router.push("/(app)");
+       
       }
-    } else {
-      setLoading(false); // Stop loading
-      Alert.alert("Error", "Please provide both email and password.");
+      else {
+        Alert.alert("Error", "Invalid credentials.");
+      }
+    } catch (error) {
+      console.error("Sign-up error:", error.response?.data || error.message);
+      if (error.response?.status === 401) {
+        Alert.alert("Error", "Unauthorized: Invalid credentials or access.");
+      } else {
+        Alert.alert("Error", "Something went wrong. Please try again later.");
+      }
     }
   };
-/*
-  const handleError = () => {
-    Alert.alert("Form Error", "Please fill in all fields correctly.");
-  };
-*/
-
+  
+  
+  
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Sign In</Text>
@@ -63,7 +61,7 @@ const SignIn = () => {
             placeholder="Email"
             onBlur={onBlur}
             onChangeText={onChange}
-            value={value}
+            value={value.email}
           />
         )}
       />
@@ -83,16 +81,21 @@ const SignIn = () => {
           <TextInput
             style={[styles.input, errors.password && styles.errorInput]}
             placeholder="Password"
-            secureTextEntry
+            secureTextEntry={true}
             onBlur={onBlur}
             onChangeText={onChange}
-            value={value}
+            value={value.password}
           />
         )}
       />
       {errors.password && <Text style={styles.errorText}>{errors.password.message}</Text>}
 
       <Button title="Sign In" onPress={handleSubmit(onSubmit)} />
+      
+      <FontAwesome5.Button  name="google" onPress={() =>{console.log(1)}}
+        >
+  <Text style={styles.googleText}>Log In With Google</Text>
+</FontAwesome5.Button>
     </View>
   );
 };
