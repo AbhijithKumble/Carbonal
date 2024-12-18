@@ -1,9 +1,10 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
-  email: String, 
-  password: String, 
-  created_at: String,
-  updated_at: String,
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+});
 
-}); 
+const User = mongoose.model('UserInfo', userSchema);
+
+export default User;
