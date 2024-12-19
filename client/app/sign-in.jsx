@@ -66,7 +66,7 @@ const SignIn = () => {
       console.log("Server Response:", response.data);
   
       if (response.data.token) {
-        Alert.alert("Sign Up Successful", "You are now signed in!");
+     
         router.push("/(app)");
       } else if(response.data.data==="User already present"){
         router.push("/(app)");
@@ -78,9 +78,10 @@ const SignIn = () => {
     } catch (error) {
       console.error("Sign-up error:", error.response?.data || error.message);
       if (error.response?.status === 401) {
-        Alert.alert("Error", "Unauthorized: Invalid credentials or access.");
+        
+        // Alert.alert("Error", "Unauthorized: Invalid credentials or access.");
       } else {
-        Alert.alert("Error", "Something went wrong. Please try again later.");
+        // Alert.alert("Error", "Something went wrong. Please try again later.");
       }
     }
   };
