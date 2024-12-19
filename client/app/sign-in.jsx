@@ -1,11 +1,8 @@
-
 import React, { useEffect } from "react";
 import { Text, View, TextInput, Button, StyleSheet, Alert, Pressable } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import {
-
   statusCodes,
-  
   GoogleSignin,
 } from '@react-native-google-signin/google-signin';
 
@@ -16,8 +13,6 @@ import axios from 'axios';
 const androidClient="846065075010-1gf6p9hlhuk0gsdqd94rt0q2p1ilq311.apps.googleusercontent.com";
 const webid="846065075010-d2gagffur44lfgja4jbrkn0php103d27.apps.googleusercontent.com";
 const iosid="846065075010-its3uresv6ueijejsnhjvtetpoqo49s3.apps.googleusercontent.com";
-
-
 
 GoogleSignin.configure({
   webClientId: webid, 
@@ -46,12 +41,7 @@ const googlesignin = async () => {
   }
 };
 
-
-
 const SignIn = () => {
- 
-
-
   const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
       email: "",
@@ -147,6 +137,8 @@ const SignIn = () => {
   );
 };
 
+export default SignIn;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -202,4 +194,3 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignIn;
