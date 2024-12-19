@@ -1,11 +1,57 @@
-import React from "react";
-import { Text, View, TextInput, Button, StyleSheet, Alert } from "react-native";
+
+import React, { useEffect } from "react";
+import { Text, View, TextInput, Button, StyleSheet, Alert, Pressable } from "react-native";
 import { useForm, Controller } from "react-hook-form";
+import {
+
+  statusCodes,
+  
+  GoogleSignin,
+} from '@react-native-google-signin/google-signin';
 
 import { router } from "expo-router";
 import { FontAwesome5 } from '@expo/vector-icons';
 import axios from 'axios';
+
+const androidClient="846065075010-1gf6p9hlhuk0gsdqd94rt0q2p1ilq311.apps.googleusercontent.com";
+const webid="846065075010-d2gagffur44lfgja4jbrkn0php103d27.apps.googleusercontent.com";
+const iosid="846065075010-its3uresv6ueijejsnhjvtetpoqo49s3.apps.googleusercontent.com";
+
+
+
+GoogleSignin.configure({
+  webClientId: webid, 
+  offlineAccess: true,
+  scopes: ['https://www.googleapis.com/auth/drive.readonly'],
+  forceCodeForRefreshToken: false,
+  iosClientId: iosid,
+  
+});
+
+const googlesignin = async () => {
+  try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      console.log("User Info:", userInfo);
+  } catch (error) {
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+          console.log("User cancelled the sign-in process.");
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+          console.log("Sign-in is already in progress.");
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+          console.log("Play services are not available.");
+      } else {
+          console.log("Some other error:", error);
+      }
+  }
+};
+
+
+
 const SignIn = () => {
+ 
+
+
   const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
       email: "",
@@ -38,8 +84,7 @@ const SignIn = () => {
       }
     }
   };
-  
-  
+
   
   return (
     <View style={styles.container}>
@@ -90,12 +135,14 @@ const SignIn = () => {
       />
       {errors.password && <Text style={styles.errorText}>{errors.password.message}</Text>}
 
-      <Button title="Sign In" onPress={handleSubmit(onSubmit)} />
+      <Pressable style={styles.googleText} title="google signin"  onPress={handleSubmit(onSubmit)} >
+        <Text style={styles.text} >Sign In</Text>
+      </Pressable>
       
-      <FontAwesome5.Button  name="google" onPress={() =>{console.log(1)}}
+      <Pressable style={styles.googleText} title="google" onPress={googlesignin}
         >
-  <Text style={styles.googleText}>Log In With Google</Text>
-</FontAwesome5.Button>
+      <Text style={styles.text} >Log In With Google</Text>
+      </Pressable>
     </View>
   );
 };
@@ -105,11 +152,15 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     padding: 20,
-    backgroundColor: "#fff",
+    backgroundColor: "#c4dad2",
+  },
+  text:{
+    color:"white",
+    fontFamily: "Blimps", 
   },
   header: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontFamily:"Blimps",
     marginBottom: 20,
     textAlign: "center",
   },
@@ -117,9 +168,12 @@ const styles = StyleSheet.create({
     height: 50,
     borderColor: "#ccc",
     borderWidth: 1,
-    borderRadius: 8,
+    borderRadius: 20,
     paddingHorizontal: 10,
     marginBottom: 10,
+    marginTop: 20,
+    textAlign: "center",
+    backgroundColor: "#77bba2",
   },
   errorInput: {
     borderColor: "red",
@@ -127,6 +181,24 @@ const styles = StyleSheet.create({
   errorText: {
     color: "red",
     marginBottom: 10,
+  },
+
+  googleText: {
+    marginTop: 20, // Create a gap above the Google button
+    justifyContent: "center",
+    borderColor: "#ccc",
+    borderWidth: 1,
+    borderRadius: 20,
+    height:50,
+    
+    alignItems:"center",
+    textAlign:"center",
+    alignContent:"center",
+    paddingVertical:12,
+    backgroundColor:"#3c7962",
+    color:"white",
+    fontFamily: "Blimps", 
+    fontSize:16,
   },
 });
 
