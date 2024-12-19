@@ -40,8 +40,12 @@ const SignIn = () => {
       }
     }
   };
+/*
+  const handleError = () => {
+    Alert.alert("Form Error", "Please fill in all fields correctly.");
+  };
+*/
 
-  
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Sign In</Text>
@@ -62,7 +66,7 @@ const SignIn = () => {
             placeholder="Email"
             onBlur={onBlur}
             onChangeText={onChange}
-            value={value.email.email}
+            value={value.email}
           />
         )}
       />
@@ -91,14 +95,7 @@ const SignIn = () => {
       />
       {errors.password && <Text style={styles.errorText}>{errors.password.message}</Text>}
 
-      <Pressable style={styles.googleText} title="google signin"  onPress={handleSubmit(onSubmit)} >
-        <Text style={styles.text} >Sign In</Text>
-      </Pressable>
-      
-      <Pressable style={styles.googleText} title="google" onPress={googlesignin}
-        >
-      <Text style={styles.text} >Log In With Google</Text>
-      </Pressable>
+      <Button title="Sign In" onPress={handleSubmit(onSubmit)} />
     </View>
   );
 };
