@@ -18,23 +18,18 @@ const SignUp = () => {
   
     if (data.email && data.password) {
       try {
-        const response = await axios.post("http://192.168.0.108:3001/signup", {
+        const response = await axios.post("http://192.168.0.104:3000/signup", {
           email: data.email,
           password: data.password,
         });
-  
-        console.log("Server Response:", response.data); // Log the response to inspect
-  
 
-        if (response.data.status === "ok" && response.data.data === "User created") {
-          Alert.alert("Sign Up Successful", "User has been created successfully.");
-          reset(); 
-          router.push("/(app)");
-        }else if(response.data.data==="User already present"){
-          Alert.alert("error", "User has been already created");
-        }
-         else {
-          Alert.alert("Error", "An unexpected error occurred. Please try again.");
+        // Check if the response has a token
+        if (response.data.token) {
+          // Store the token (e.g., in AsyncStorage, Context, or Redux)
+          Alert.alert("Sign In Successful", `Token: ${response.data.token}`);
+          reset(); // Reset form fields after successful submission
+        } else {
+          Alert.alert("Error", "Failed to sign in. Please try again.");
         }
       } catch (error) {
         console.error("Sign-up error:", error);

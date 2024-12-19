@@ -1,11 +1,12 @@
-import React from "react";
-import { Text, View, TextInput, Button, StyleSheet, Alert } from "react-native";
+
+import React, { useEffect } from "react";
+import { Text, View, TextInput, Button, StyleSheet, Alert, Pressable } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 
-import { router } from "expo-router";
-import { FontAwesome5 } from '@expo/vector-icons';
-import axios from 'axios';
 const SignIn = () => {
+ 
+
+
   const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
       email: "",
@@ -15,12 +16,12 @@ const SignIn = () => {
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post("http://192.168.0.108:3001/signin", data);
+      const response = await axios.post("http://192.168.0.104:3000/signin", data);
   
       console.log("Server Response:", response.data);
   
       if (response.data.token) {
-        Alert.alert("Sign Up Successful", "You are now signed in!");
+     
         router.push("/(app)");
       } else if(response.data.data==="User already present"){
         router.push("/(app)");
@@ -32,14 +33,14 @@ const SignIn = () => {
     } catch (error) {
       console.error("Sign-up error:", error.response?.data || error.message);
       if (error.response?.status === 401) {
-        Alert.alert("Error", "Unauthorized: Invalid credentials or access.");
+        
+        // Alert.alert("Error", "Unauthorized: Invalid credentials or access.");
       } else {
-        Alert.alert("Error", "Something went wrong. Please try again later.");
+        // Alert.alert("Error", "Something went wrong. Please try again later.");
       }
     }
   };
-  
-  
+
   
   return (
     <View style={styles.container}>
@@ -61,7 +62,7 @@ const SignIn = () => {
             placeholder="Email"
             onBlur={onBlur}
             onChangeText={onChange}
-            value={value.email}
+            value={value.email.email}
           />
         )}
       />
@@ -90,12 +91,14 @@ const SignIn = () => {
       />
       {errors.password && <Text style={styles.errorText}>{errors.password.message}</Text>}
 
-      <Button title="Sign In" onPress={handleSubmit(onSubmit)} />
+      <Pressable style={styles.googleText} title="google signin"  onPress={handleSubmit(onSubmit)} >
+        <Text style={styles.text} >Sign In</Text>
+      </Pressable>
       
-      <FontAwesome5.Button  name="google" onPress={() =>{console.log(1)}}
+      <Pressable style={styles.googleText} title="google" onPress={googlesignin}
         >
-  <Text style={styles.googleText}>Log In With Google</Text>
-</FontAwesome5.Button>
+      <Text style={styles.text} >Log In With Google</Text>
+      </Pressable>
     </View>
   );
 };
@@ -105,11 +108,15 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     padding: 20,
-    backgroundColor: "#fff",
+    backgroundColor: "#c4dad2",
+  },
+  text:{
+    color:"white",
+    fontFamily: "Blimps", 
   },
   header: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontFamily:"Blimps",
     marginBottom: 20,
     textAlign: "center",
   },
@@ -117,9 +124,12 @@ const styles = StyleSheet.create({
     height: 50,
     borderColor: "#ccc",
     borderWidth: 1,
-    borderRadius: 8,
+    borderRadius: 20,
     paddingHorizontal: 10,
     marginBottom: 10,
+    marginTop: 20,
+    textAlign: "center",
+    backgroundColor: "#77bba2",
   },
   errorInput: {
     borderColor: "red",
@@ -127,6 +137,24 @@ const styles = StyleSheet.create({
   errorText: {
     color: "red",
     marginBottom: 10,
+  },
+
+  googleText: {
+    marginTop: 20, // Create a gap above the Google button
+    justifyContent: "center",
+    borderColor: "#ccc",
+    borderWidth: 1,
+    borderRadius: 20,
+    height:50,
+    
+    alignItems:"center",
+    textAlign:"center",
+    alignContent:"center",
+    paddingVertical:12,
+    backgroundColor:"#3c7962",
+    color:"white",
+    fontFamily: "Blimps", 
+    fontSize:16,
   },
 });
 

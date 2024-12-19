@@ -8,3 +8,4 @@ const userSchema = new mongoose.Schema({
 const User = mongoose.model('UserInfo', userSchema);
 
 export default User;
+

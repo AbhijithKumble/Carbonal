@@ -8,6 +8,8 @@ import cors from 'cors';
 
 import User from './models/User.model.js';
 
+import User from './models/User.model.js';
+
 dotenv.config();
 
 const app = express();
@@ -109,5 +111,5 @@ app.get('/protected', authenticateToken, (req, res) => {
 
 // Start the server
 app.listen(PORT, () => {
-  console.log(`Server running on http://192.168.0.108:${PORT}`);
+  console.log(`Server running on http://192.168.0.104:${PORT}`);
 });
