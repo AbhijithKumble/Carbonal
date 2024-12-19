@@ -2,43 +2,50 @@ import React from "react";
 import { Text, View, TextInput, Button, StyleSheet, Alert } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import axios from "axios";
+import { useNavigation } from '@react-navigation/native'; // Import useNavigation hook
+import { router } from "expo-router";
 
 const SignUp = () => {
-  const { control, handleSubmit, watch, formState: { errors } } = useForm({
+  const { control, handleSubmit, watch, formState: { errors },reset } = useForm({
     defaultValues: {
       email: "",
       password: "",
       confirmPassword: "",
     },
   });
-
- const onSubmit = async (data) => {
-    console.log("clicked sign up", data)
-    setLoading(true); // Start loading
+  const navigation = useNavigation();
+  const onSubmit = async (data) => {
+    console.log("clicked sign up", data);
+  
     if (data.email && data.password) {
       try {
-        const response = await axios.post("http://localhost:3000/signup", {
+        const response = await axios.post("http://192.168.0.104:3000/signup", {
           email: data.email,
           password: data.password,
         });
+  
+        console.log("Server Response:", response.data); // Log the response to inspect
+  
 
-        // Check if the response has a token
-        if (response.data.token) {
-          // Store the token (e.g., in AsyncStorage, Context, or Redux)
-          Alert.alert("Sign In Successful", `Token: ${response.data.token}`);
-          reset(); // Reset form fields after successful submission
-        } else {
-          Alert.alert("Error", "Failed to sign in. Please try again.");
+        if (response.data.status === "ok" && response.data.data === "User created") {
+          Alert.alert("Sign Up Successful", "User has been created successfully.");
+          reset(); 
+          router.push("/(app)")
+        }else if(response.data.data==="User already present"){
+          Alert.alert("error", "User has been already created");
+        }
+         else {
+          Alert.alert("Error", "An unexpected error occurred. Please try again.");
         }
       } catch (error) {
-        setLoading(false); // Stop loading
-        Alert.alert("Error", "Something went wrong. Please try again.");
+        console.error("Sign-up error:", error);
+        Alert.alert("Error", `Network Error: ${error.message}`);
       }
     } else {
-      setLoading(false); // Stop loading
       Alert.alert("Error", "Please provide both email and password.");
     }
   };
+  
   const password = watch("password");
 
   return (
