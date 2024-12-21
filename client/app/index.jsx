@@ -1,18 +1,18 @@
 import { Link } from "expo-router";
 import { Button, StyleSheet, Text, View } from "react-native";
 import { router } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage"; // Import AsyncStorage
+import { useEffect, useState } from "react";
+import Index from "./(app)";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-const Page = () => {
+const LoginNav = () => {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.main}>
         <Text style={styles.title}>
           Welcome! How would you like to take your first step towards sustainability?
         </Text>
-        {/* <Button
-          title="Go to (app) Index"
-          onPress={() => router.push("/(app)")}
-        /> */}
         <Link style={styles.sign} href="/sign-in">
           <Text style={styles.buttonText}>Sign In</Text>
         </Link>
@@ -20,11 +20,37 @@ const Page = () => {
           <Text style={styles.buttonText}>Sign Up</Text>
         </Link>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
-export default Page;
+const HomeNav = () => {
+  return (<Index />);
+};
+
+const Page = () => {
+  const [isLoggedIn, setisLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const data = await AsyncStorage.getItem("isLoggedIn");
+        console.log("Retrieved isLoggedIn:", data);
+        setisLoggedIn(data === "true"); // Boolean comparison
+      } catch (error) {
+        console.error("Error reading AsyncStorage:", error);
+        setisLoggedIn(false); // Default to false on error
+      }
+    };
+    getData();
+  }, []);
+  return (
+    <View style={{ flex: 1 }}>
+      {isLoggedIn ? <HomeNav /> : <LoginNav />}
+ 
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -41,17 +67,14 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     fontWeight: "bold",
-  },
-  subtitle: {
-    fontSize: 36,
-    color: "#38434D",
+    textAlign: "center",
   },
   sign: {
     width: 320,
     maxWidth: "90%",
     height: 40,
-    justifyContent: "center", // Centers content vertically
-    alignItems: "center", // Centers content horizontally
+    justifyContent: "center",
+    alignItems: "center",
     backgroundColor: "lightblue",
     borderWidth: 1,
     borderColor: "#ddd",
@@ -61,14 +84,16 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 5,
     elevation: 5,
-    marginTop:30,
-    marginLeft:5,
+    marginTop: 30,
+    marginLeft: 5,
   },
   buttonText: {
-    color: "#000", // Makes text visible
+    color: "#000",
     fontSize: 18,
-    textAlign: "center", // Ensures the text is centered horizontally
-    lineHeight:30, // Centers text vertically within the box
-    fontFamily: "Blimps", // Use your custom font here if available
+    textAlign: "center",
+    lineHeight: 30,
+    fontFamily: "Blimps",
   },
 });
+
+export default Page;

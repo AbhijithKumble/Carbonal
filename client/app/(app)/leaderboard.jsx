@@ -1,12 +1,17 @@
-import { Image, Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native'
+import { Button, Image, Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import { Link } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Leaderboard = () => {
+
+
   const handlePress = (buttonNumber) => {
     console.log(`Button ${buttonNumber} pressed`);
   };
   return (
     <SafeAreaView style={styles.container} >
+      <Link href="./(leaderboard)" asChild>
        <Pressable style={styles.box} onPress={() => handlePress(1)}>
             <Image
               source={require("../../assets/images/leaderboard.webp")} // Replace with your image path
@@ -14,6 +19,8 @@ const Leaderboard = () => {
             />
             <Text style={styles.buttonText}>LEADERBOARD</Text>
           </Pressable>
+          </Link>
+          
     </SafeAreaView>
   )
 }
