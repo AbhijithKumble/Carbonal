@@ -143,18 +143,18 @@ const styles = StyleSheet.create({
     borderRadius: 10,
 
     elevation: 5,
-  },
-  buttonText: {
-    position: "absolute",
-    top: "110%",
-    left: "40%",
-    transform: [{ translateX: -50 }, { translateY: -50 }], // Centers the text
-    color: "#fff",
-    fontSize: 28,
-
-    textAlign: "center",
-    fontFamily: 'Blimps',
-  },
+  },  
+    buttonText: {
+      position: "absolute",
+      top: "110%",
+      left: "40%",
+      transform: [{ translateX: -50 }, { translateY: -50 }], // Centers the text
+      color: "#fff",
+      fontSize: 28,
+      
+      textAlign: "center",
+      fontFamily:'Blimps',
+    },
   buttonTexttips: {
     position: "absolute",
     top: "110%",
