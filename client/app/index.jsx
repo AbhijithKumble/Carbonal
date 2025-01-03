@@ -1,23 +1,56 @@
 import { Link } from "expo-router";
 import { Button, StyleSheet, Text, View } from "react-native";
 import { router } from "expo-router";
-const Page = () => {
+import AsyncStorage from "@react-native-async-storage/async-storage"; // Import AsyncStorage
+import { useEffect, useState } from "react";
+import Index from "./(app)";
+import { SafeAreaView } from "react-native-safe-area-context";
+
+const LoginNav = () => {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.main}>
-        <Text style={styles.title}>Hello World</Text>
-        <Button
-        title="Go to (app) Index"
-        onPress={() => router.push("/(app)")}
-      />
-        <Link href="/sign-in">Sign In</Link>
-        <Link href="/sign-up">Sign Up</Link>
+        <Text style={styles.title}>
+          Welcome! How would you like to take your first step towards sustainability?
+        </Text>
+        <Link style={styles.sign} href="/sign-in">
+          <Text style={styles.buttonText}>Sign In</Text>
+        </Link>
+        <Link style={styles.sign} href="/sign-up">
+          <Text style={styles.buttonText}>Sign Up</Text>
+        </Link>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
-export default Page;
+const HomeNav = () => {
+  return (<Index />);
+};
+
+const Page = () => {
+  const [isLoggedIn, setisLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const data = await AsyncStorage.getItem("isLoggedIn");
+        console.log("Retrieved isLoggedIn:", data);
+        setisLoggedIn(data === "true"); // Boolean comparison
+      } catch (error) {
+        console.error("Error reading AsyncStorage:", error);
+        setisLoggedIn(false); // Default to false on error
+      }
+    };
+    getData();
+  }, []);
+  return (
+    <View style={{ flex: 1 }}>
+      {isLoggedIn ? <HomeNav /> : <LoginNav />}
+ 
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -32,12 +65,35 @@ const styles = StyleSheet.create({
     marginHorizontal: "auto",
   },
   title: {
-    fontSize: 64,
+    fontSize: 32,
     fontWeight: "bold",
+    textAlign: "center",
   },
-  subtitle: {
-    fontSize: 36,
-    color: "#38434D",
+  sign: {
+    width: 320,
+    maxWidth: "90%",
+    height: 40,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "lightblue",
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 5,
+    marginTop: 30,
+    marginLeft: 5,
+  },
+  buttonText: {
+    color: "#000",
+    fontSize: 18,
+    textAlign: "center",
+    lineHeight: 30,
+    fontFamily: "Blimps",
   },
 });
 
+export default Page;

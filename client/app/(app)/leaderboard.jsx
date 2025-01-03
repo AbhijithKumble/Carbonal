@@ -4,17 +4,21 @@ import {
   SafeAreaView,
   StyleSheet,
   Text,
-  View,
 } from "react-native";
 import React from "react";
 import { Link } from "expo-router";
+import { Image, Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native'
+import React from 'react'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Leaderboard = () => {
+
+
   const handlePress = (buttonNumber) => {
     console.log(`Button ${buttonNumber} pressed`);
   };
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} >
       <Link href="./(leaderboard)" asChild>
         <Pressable style={styles.box} onPress={() => handlePress(1)}>
           <Image
@@ -67,10 +71,8 @@ const styles = StyleSheet.create({
     top: "50%",
     left: "25%",
     fontFamily: "Blimps",
-
     color: "#fff",
     fontSize: 25,
-
     textAlign: "center",
   },
 });

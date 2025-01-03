@@ -1,4 +1,4 @@
-import { Link, Stack } from "expo-router";
+import { Link, router } from "expo-router";
 import React from "react";
 import {
   SafeAreaView,
@@ -9,15 +9,26 @@ import {
   Image,
   ImageBackground,
 } from "react-native";
+import { SafeAreaView, StyleSheet, View, Text, Pressable, Image, ImageBackground } from "react-native";
 import Welcome from "./welcome";
 import Locationreact from "./locations";
 import Profile from "./profile";
 import Leaderboard from "./leaderboard";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 const Index = () => {
+  const signOut = () => {
+
+    AsyncStorage.setItem('isLoggedIn', '');
+    AsyncStorage.setItem('token', '');
+    router.push("sign-in");
+
+  }
   const handlePress = (buttonNumber) => {
     console.log(`Button ${buttonNumber} pressed`);
   };
+
 
   return (
     <ImageBackground
@@ -87,6 +98,25 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
   },
+  boxed: {
+    position: "absolute",
+    width: 60,
+    marginTop: -40,
+    maxWidth: "width" * 0.9,
+    height: 40,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(255, 255, 255, 0.9)",
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 5,
+  },
+
   container: {
     flex: 1,
 
@@ -119,6 +149,7 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 5,
   },
+
   image: {
     width: 160,
     maxWidth: "width" * 0.9,
@@ -148,7 +179,7 @@ const styles = StyleSheet.create({
     fontSize: 28,
 
     textAlign: "center",
-    fontFamily: "Blimps",
+    fontFamily: 'Blimps',
   },
   buttonTexttips: {
     position: "absolute",

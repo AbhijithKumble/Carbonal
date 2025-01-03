@@ -2,48 +2,72 @@ import React from "react";
 import { Text, View, TextInput, Button, StyleSheet, Alert } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import axios from "axios";
-
+import { router } from "expo-router"; 
+import AsyncStorage from '@react-native-async-storage/async-storage'
 const SignUp = () => {
-  const { control, handleSubmit, watch, formState: { errors } } = useForm({
+  const { control, handleSubmit, watch, formState: { errors }, reset } = useForm({
     defaultValues: {
+      name: "",
       email: "",
       password: "",
       confirmPassword: "",
     },
   });
 
- const onSubmit = async (data) => {
-    console.log("clicked sign up", data)
-    setLoading(true); // Start loading
-    if (data.email && data.password) {
+  const onSubmit = async (data) => {
+    console.log("Sign-up data:", data);
+
+    if (data.email && data.password && data.name) {
       try {
-        const response = await axios.post("http://localhost:3000/signup", {
+        const response = await axios.post("http://192.168.0.101:3000/signup", {
+          name: data.name,
           email: data.email,
           password: data.password,
+          dateJoined: new Date().toISOString(), // Automatically include current date
         });
 
-        // Check if the response has a token
         if (response.data.token) {
-          // Store the token (e.g., in AsyncStorage, Context, or Redux)
-          Alert.alert("Sign In Successful", `Token: ${response.data.token}`);
-          reset(); // Reset form fields after successful submission
+          Alert.alert("Success", "Sign-up successful!");
+          reset(); // Clear the form
+          AsyncStorage.setItem('token',response.data.data);
+          await AsyncStorage.setItem("isLoggedIn", "true");
+          await AsyncStorage.setItem("email", data.email);
+  
+        router.push("/(app)"); 
         } else {
-          Alert.alert("Error", "Failed to sign in. Please try again.");
+          Alert.alert("Error", "Sign-up failed. Please try again.");
         }
       } catch (error) {
-        setLoading(false); // Stop loading
-        Alert.alert("Error", "Something went wrong. Please try again.");
+        console.error("Sign-up error:", error);
+        Alert.alert("Error", `Network Error: ${error.message}`);
       }
     } else {
-      setLoading(false); // Stop loading
-      Alert.alert("Error", "Please provide both email and password.");
+      Alert.alert("Error", "Please fill in all the required fields.");
     }
   };
+
   const password = watch("password");
 
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Sign Up</Text>
+
+      {/* Name Field */}
+      <Controller
+        control={control}
+        name="name"
+        rules={{ required: "Name is required." }}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <TextInput
+            style={[styles.input, errors.name && styles.errorInput]}
+            placeholder="Name"
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+          />
+        )}
+      />
+      {errors.name && <Text style={styles.errorText}>{errors.name.message}</Text>}
 
       {/* Email Field */}
       <Controller

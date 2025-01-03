@@ -1,8 +1,57 @@
-import React from "react";
-import { Text, View, TextInput, Button, StyleSheet, Alert } from "react-native";
+
+import React, { useEffect } from "react";
+import { Text, View, TextInput, Button, StyleSheet, Alert, Pressable } from "react-native";
 import { useForm, Controller } from "react-hook-form";
+// import {
+
+//   statusCodes,
+  
+//   GoogleSignin,
+// } from '@react-native-google-signin/google-signin';
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { router } from "expo-router";
+import { FontAwesome5 } from '@expo/vector-icons';
+import axios from 'axios';
+
+const androidClient="846065075010-1gf6p9hlhuk0gsdqd94rt0q2p1ilq311.apps.googleusercontent.com";
+const webid="846065075010-d2gagffur44lfgja4jbrkn0php103d27.apps.googleusercontent.com";
+const iosid="846065075010-its3uresv6ueijejsnhjvtetpoqo49s3.apps.googleusercontent.com";
+
+
+
+// GoogleSignin.configure({
+//   webClientId: webid, 
+//   offlineAccess: true,
+//   scopes: ['https://www.googleapis.com/auth/drive.readonly'],
+//   forceCodeForRefreshToken: false,
+//   iosClientId: iosid,
+  
+// });
+
+// const googlesignin = async () => {
+//   try {
+//       await GoogleSignin.hasPlayServices();
+//       const userInfo = await GoogleSignin.signIn();
+//       console.log("User Info:", userInfo);
+//   } catch (error) {
+//       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+//           console.log("User cancelled the sign-in process.");
+//       } else if (error.code === statusCodes.IN_PROGRESS) {
+//           console.log("Sign-in is already in progress.");
+//       } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+//           console.log("Play services are not available.");
+//       } else {
+//           console.log("Some other error:", error);
+//       }
+//   }
+// };
+
+
 
 const SignIn = () => {
+ 
+
+
   const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
       email: "",
@@ -10,39 +59,45 @@ const SignIn = () => {
     },
   });
 
-
   const onSubmit = async (data) => {
-    setLoading(true); // Start loading
-    if (data.email && data.password) {
-      try {
-        const response = await axios.post("http://localhost:3000/signin", {
-          email: data.email,
-          password: data.password,
-        });
+    try {
+      const response = await axios.post("http://192.168.0.101:3000/signin", data);
+  
+      console.log("Server Response:", response.data);
+  
+      if (response.data.token) {
 
-        // Check if the response has a token
-        if (response.data.token) {
-          // Store the token (e.g., in AsyncStorage, Context, or Redux)
-          Alert.alert("Sign In Successful", `Token: ${response.data.token}`);
-          reset(); // Reset form fields after successful submission
-        } else {
-          Alert.alert("Error", "Failed to sign in. Please try again.");
-        }
-      } catch (error) {
-        setLoading(false); // Stop loading
-        Alert.alert("Error", "Something went wrong. Please try again.");
+        AsyncStorage.setItem('token',response.data.data);
+        await AsyncStorage.setItem("isLoggedIn", "true");
+        await AsyncStorage.setItem("email", data.email);
+
+        router.push("/(app)"); 
+
+      } else if(response.data.data==="User already present"){
+        
+        AsyncStorage.setItem('token',response.data.data);
+        await AsyncStorage.setItem("isLoggedIn", "true");
+        await AsyncStorage.setItem("email", data.email);
+
+        router.push("/(app)"); 
+       
       }
-    } else {
-      setLoading(false); // Stop loading
-      Alert.alert("Error", "Please provide both email and password.");
+      else {
+        Alert.alert("Error", "Invalid credentials.");
+      }
+    } catch (error) {
+
+      Alert.alert("Sign-up error:",  error.message);
+      if (error.response?.status === 401) {
+        
+        Alert.alert("Error", "Unauthorized: Invalid credentials or access.");
+      } else {
+        Alert.alert("Error", "Something went wrong. Please try again later.");
+      }
     }
   };
-/*
-  const handleError = () => {
-    Alert.alert("Form Error", "Please fill in all fields correctly.");
-  };
-*/
 
+  
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Sign In</Text>
@@ -63,7 +118,7 @@ const SignIn = () => {
             placeholder="Email"
             onBlur={onBlur}
             onChangeText={onChange}
-            value={value}
+            value={value.email}
           />
         )}
       />
@@ -83,16 +138,23 @@ const SignIn = () => {
           <TextInput
             style={[styles.input, errors.password && styles.errorInput]}
             placeholder="Password"
-            secureTextEntry
+            secureTextEntry={true}
             onBlur={onBlur}
             onChangeText={onChange}
-            value={value}
+            value={value.password}
           />
         )}
       />
       {errors.password && <Text style={styles.errorText}>{errors.password.message}</Text>}
 
-      <Button title="Sign In" onPress={handleSubmit(onSubmit)} />
+      <Pressable style={styles.googleText} title="google signin"  onPress={handleSubmit(onSubmit)} >
+        <Text style={styles.text} >Sign In</Text>
+      </Pressable>
+      
+      <Pressable style={styles.googleText} title="google" onPress={console.log(1)}
+        >
+      <Text style={styles.text} >Log In With Google</Text>
+      </Pressable>
     </View>
   );
 };
@@ -102,11 +164,15 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     padding: 20,
-    backgroundColor: "#fff",
+    backgroundColor: "#c4dad2",
+  },
+  text:{
+    color:"white",
+    fontFamily: "Blimps", 
   },
   header: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontFamily:"Blimps",
     marginBottom: 20,
     textAlign: "center",
   },
@@ -114,9 +180,12 @@ const styles = StyleSheet.create({
     height: 50,
     borderColor: "#ccc",
     borderWidth: 1,
-    borderRadius: 8,
+    borderRadius: 20,
     paddingHorizontal: 10,
     marginBottom: 10,
+    marginTop: 20,
+    textAlign: "center",
+    backgroundColor: "#77bba2",
   },
   errorInput: {
     borderColor: "red",
@@ -124,6 +193,24 @@ const styles = StyleSheet.create({
   errorText: {
     color: "red",
     marginBottom: 10,
+  },
+
+  googleText: {
+    marginTop: 20, // Create a gap above the Google button
+    justifyContent: "center",
+    borderColor: "#ccc",
+    borderWidth: 1,
+    borderRadius: 20,
+    height:50,
+    
+    alignItems:"center",
+    textAlign:"center",
+    alignContent:"center",
+    paddingVertical:12,
+    backgroundColor:"#3c7962",
+    color:"white",
+    fontFamily: "Blimps", 
+    fontSize:16,
   },
 });
 
