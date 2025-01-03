@@ -1,32 +1,42 @@
-import { Image, Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import {
+  Image,
+  Pressable,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import React from "react";
+import { Link } from "expo-router";
 
 const Leaderboard = () => {
   const handlePress = (buttonNumber) => {
     console.log(`Button ${buttonNumber} pressed`);
   };
   return (
-    <SafeAreaView style={styles.container} >
-       <Pressable style={styles.box} onPress={() => handlePress(1)}>
-            <Image
-              source={require("../../assets/images/leaderboard.webp")} // Replace with your image path
-              style={styles.image}
-            />
-            <Text style={styles.buttonText}>LEADERBOARD</Text>
-          </Pressable>
+    <SafeAreaView style={styles.container}>
+      <Link href="./(leaderboard)" asChild>
+        <Pressable style={styles.box} onPress={() => handlePress(1)}>
+          <Image
+            source={require("../../assets/images/leaderboard.webp")} // Replace with your image path
+            style={styles.image}
+          />
+          <Text style={styles.buttonText}>LEADERBOARD</Text>
+        </Pressable>
+      </Link>
     </SafeAreaView>
-  )
-}
+  );
+};
 
-export default Leaderboard
+export default Leaderboard;
 
 const styles = StyleSheet.create({
-  container:{
-    flex:1,
+  container: {
+    flex: 1,
   },
   box: {
-    position:"absolute",
-    width:330,
+    position: "absolute",
+    width: 330,
     maxWidth: "width" * 0.9,
     height: 160,
     justifyContent: "center",
@@ -40,29 +50,27 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 5,
     elevation: 5,
-    top:580,
-    left:15,
+    top: 580,
+    left: 15,
   },
   image: {
-    width:330,
+    width: 330,
     maxWidth: "width" * 0.9,
     height: 160,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
     elevation: 5,
-    
-   
   },
   buttonText: {
     position: "absolute",
     top: "50%",
     left: "25%",
-    fontFamily:'Blimps',
-    
+    fontFamily: "Blimps",
+
     color: "#fff",
     fontSize: 25,
-    
+
     textAlign: "center",
   },
-})
+});

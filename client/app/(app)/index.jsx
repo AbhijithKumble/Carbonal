@@ -1,21 +1,25 @@
 import { Link, Stack } from "expo-router";
 import React from "react";
-import { SafeAreaView, StyleSheet, View, Text, Pressable, Image, ImageBackground } from "react-native";
-import Welcome from './welcome';
-import Locationreact from './locations';
+import {
+  SafeAreaView,
+  StyleSheet,
+  View,
+  Text,
+  Pressable,
+  Image,
+  ImageBackground,
+} from "react-native";
+import Welcome from "./welcome";
+import Locationreact from "./locations";
 import Profile from "./profile";
 import Leaderboard from "./leaderboard";
 
-
 const Index = () => {
-
   const handlePress = (buttonNumber) => {
     console.log(`Button ${buttonNumber} pressed`);
   };
 
   return (
-
-
     <ImageBackground
       source={require("../../assets/images/leavesdark.jpeg")} // Replace with your background image
       style={styles.background}
@@ -26,11 +30,9 @@ const Index = () => {
         <Profile />
         <Locationreact />
         <View style={styles.container}>
-
           <Welcome />
 
           <View style={styles.row1}>
-
             <Link href="./(footprint)" asChild>
               <Pressable style={styles.box} onPress={() => handlePress(1)}>
                 <Image
@@ -41,17 +43,18 @@ const Index = () => {
               </Pressable>
             </Link>
 
-            <Pressable style={styles.box} onPress={() => handlePress(2)}>
-              <Image
-                source={require("../../assets/images/quicktip.png")} // Replace with your image path
-                style={styles.image2}
-              />
-              <Text style={styles.buttonTexttips}>TIPS</Text>
-            </Pressable>
+            <Link href="./(tips)" asChild>
+              <Pressable style={styles.box} onPress={() => handlePress(2)}>
+                <Image
+                  source={require("../../assets/images/quicktip.png")} // Replace with your image path
+                  style={styles.image2}
+                />
+                <Text style={styles.buttonTexttips}>TIPS</Text>
+              </Pressable>
+            </Link>
           </View>
 
           <View style={styles.row2}>
-
             <Link href="./(challenges)" asChild>
               <Pressable style={styles.box}>
                 <Image
@@ -62,20 +65,19 @@ const Index = () => {
               </Pressable>
             </Link>
 
-            <Pressable style={styles.box} onPress={() => handlePress(4)}>
-              <Image
-                source={require("../../assets/images/progress.jpeg")} // Replace with your image path
-                style={styles.image}
-              />
-              <Text style={styles.buttonText}>PROGRESS</Text>
-            </Pressable>
-
+            <Link href="./(progress)" asChild>
+              <Pressable style={styles.box} onPress={() => handlePress(4)}>
+                <Image
+                  source={require("../../assets/images/progress.jpeg")} // Replace with your image path
+                  style={styles.image}
+                />
+                <Text style={styles.buttonText}>PROGRESS</Text>
+              </Pressable>
+            </Link>
           </View>
-
         </View>
       </SafeAreaView>
     </ImageBackground>
-
   );
 };
 
@@ -84,7 +86,6 @@ export default Index;
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-
   },
   container: {
     flex: 1,
@@ -95,16 +96,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     marginTop: 180,
-
-
   },
   row2: {
     flexDirection: "row",
     justifyContent: "space-around",
 
-
     marginTop: 170,
-
   },
   box: {
     width: 160,
@@ -130,8 +127,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 10,
     elevation: 5,
-
-
   },
   image2: {
     width: 160,
@@ -153,7 +148,7 @@ const styles = StyleSheet.create({
     fontSize: 28,
 
     textAlign: "center",
-    fontFamily: 'Blimps',
+    fontFamily: "Blimps",
   },
   buttonTexttips: {
     position: "absolute",
@@ -164,7 +159,7 @@ const styles = StyleSheet.create({
     fontSize: 28,
 
     textAlign: "center",
-    fontFamily: 'Blimps',
+    fontFamily: "Blimps",
   },
   buttonTextchallenge: {
     position: "absolute",
@@ -175,6 +170,6 @@ const styles = StyleSheet.create({
     fontSize: 28,
 
     textAlign: "center",
-    fontFamily: 'Blimps',
+    fontFamily: "Blimps",
   },
 });
