@@ -23,8 +23,8 @@ const Index = () => {
   
   
   return (
-    
-    
+
+
     <ImageBackground
       source={require("../../assets/images/leavesdark.jpeg")} // Replace with your background image
       style={styles.background}
@@ -77,12 +77,10 @@ const Index = () => {
             />
             <Text style={styles.buttonText}>PROGRESS</Text>
           </Pressable>
-          
         </View>
-      </View>
       </SafeAreaView>
     </ImageBackground>
-    
+
   );
 };
 
@@ -91,7 +89,7 @@ export default Index;
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    
+
   },
   boxed:{
     position:"absolute",
@@ -120,17 +118,17 @@ const styles = StyleSheet.create({
   row1: {
     flexDirection: "row",
     justifyContent: "space-around",
-    marginTop:180,
-    
-   
+    marginTop: 180,
+
+
   },
   row2: {
     flexDirection: "row",
     justifyContent: "space-around",
-    
-  
-    marginTop:170,
-    
+
+
+    marginTop: 170,
+
   },
   box: {
     width: 160,
@@ -138,7 +136,7 @@ const styles = StyleSheet.create({
     height: 160,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(255, 255, 255, 0.9)", 
+    backgroundColor: "rgba(255, 255, 255, 0.9)",
     borderWidth: 1,
     borderColor: "#ddd",
     borderRadius: 10,
@@ -150,25 +148,25 @@ const styles = StyleSheet.create({
   },
   
   image: {
-    width:160,
+    width: 160,
     maxWidth: "width" * 0.9,
     height: 160,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
     elevation: 5,
-    
-   
+
+
   },
   image2: {
-    width:160,
+    width: 160,
     maxWidth: "width" * 0.9,
     height: 160,
     justifyContent: "center",
     alignItems: "center",
-    
+
     borderRadius: 10,
- 
+
     elevation: 5,
   },  
     buttonText: {
@@ -189,9 +187,9 @@ const styles = StyleSheet.create({
     transform: [{ translateX: -50 }, { translateY: -50 }], // Centers the text
     color: "#fff",
     fontSize: 28,
-    
+
     textAlign: "center",
-    fontFamily:'Blimps',
+    fontFamily: 'Blimps',
   },
   buttonTextchallenge: {
     position: "absolute",
@@ -200,8 +198,8 @@ const styles = StyleSheet.create({
     transform: [{ translateX: -50 }, { translateY: -50 }], // Centers the text
     color: "#fff",
     fontSize: 28,
-    
+
     textAlign: "center",
-    fontFamily:'Blimps',
+    fontFamily: 'Blimps',
   },
 });
