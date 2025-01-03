@@ -8,12 +8,11 @@ import cors from 'cors';
 
 import User from './models/User.model.js';
 
-import User from './models/User.model.js';
 
 dotenv.config();
 
 const app = express();
-const PORT = 3001;
+const PORT = 3000;
 
 // Middleware
 app.use(express.json());
@@ -33,40 +32,51 @@ app.get('/', (req, res) => {
 });
 
 // Improved Signup Route
+
 app.post('/signup', async (req, res) => {
-  const { email, password } = req.body;
-
-  console.log('Request received:', req.body);
-
-  if (!email || !password) {
-    console.log('Missing email or password');
-    return res.status(400).json({ message: 'Email and password are required.' });
-  }
+  const { email, password, name } = req.body;
 
   try {
-    const oldUser = await User.findOne({ email });
-    console.log('Existing user check:', oldUser);
-
-    if (oldUser) {
-      return res.send({ data: 'User already present' });
+    // Check if the email already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ error: 'User already exists' });
     }
 
+    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
-    console.log('Hashed password:', hashedPassword);
 
-    const newUser = await User.create({ email, password: hashedPassword });
-    console.log('New user created:', newUser);
+    // Create the new user
+    const newUser = new User({
+      email,
+      password: hashedPassword,
+      name,
+      dateJoined: new Date(), // Set dateJoined as the current date
+    });
 
-    res.send({ status: 'ok', data: 'User created' });
+    // Save the new user
+    await newUser.save();
+
+    // Generate a JWT token
+    const token = jwt.sign(
+      { userId: newUser._id, email: newUser.email }, 
+      'your_jwt_secret_key', // Replace with a secret key
+      { expiresIn: '1h' } // Token expiration time
+    );
+    res.json({ token });
+    // Send the token in the response
+    
+
   } catch (error) {
     console.error('Error during signup:', error);
-    res.status(500).json({ message: 'Error registering user.', error });
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
 // Improved Login Route
 app.post('/signin', async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password} = req.body;
+
 
   try {
     const user = await User.findOne({ email });
@@ -102,7 +112,52 @@ const authenticateToken = (req, res, next) => {
     req.user = user;
     next();
   });
-};
+};  
+
+app.post('/footprint', async (req, res) => {
+  const { email, image, score, datejoined, name, footprint } = req.body;
+  try {
+    await User.updateOne(
+      { email: email },
+      { $set: { footprint } }
+    );
+    res.send({ status: 'ok', data: 'Updated' });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ status: 'error', data: 'Internal Server Error' });
+  }
+});
+
+app.post('/update-user',async(req,res)=>{
+  const {email,image,score,datejoined,name,footprint}=req.body;
+  try {
+    await User.updateOne(
+      {email:email},
+      {
+        $set:{
+          image,
+          score,
+          datejoined,
+          name,
+          footprint,
+        }
+      }
+    );
+    res.send({ status: 'ok', data: 'Updated' });
+
+  } catch (error) {
+    console.log(error)
+  }
+})
+app.get('/leaderboard', async (req, res) => {
+  try {
+    const leaderboardData = await User.find().sort({ footprint:-1 }); // Ensure 'Leaderboard' is correctly defined
+    res.json(leaderboardData);
+  } catch (error) {
+    console.error("Error fetching leaderboard data:", error);
+    res.status(500).send({ error: "Internal Server Error" });
+  }
+});
 
 // Route: Protected route
 app.get('/protected', authenticateToken, (req, res) => {
@@ -111,5 +166,5 @@ app.get('/protected', authenticateToken, (req, res) => {
 
 // Start the server
 app.listen(PORT, () => {
-  console.log(`Server running on http://192.168.0.104:${PORT}`);
+  console.log(`Server running on http://192.168.0.101:${PORT}`);
 });

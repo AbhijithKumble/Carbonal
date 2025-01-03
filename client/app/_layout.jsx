@@ -1,25 +1,11 @@
-import { useFonts } from "expo-font";
-import { Slot } from "expo-router";
-import * as SplashScreen from "expo-splash-screen";
-import { useEffect, useState } from "react";
-import AsyncStorage from '@react-native-async-storage/async-storage'
-SplashScreen.preventAutoHideAsync();
+import { Stack } from "expo-router";
 
-const RootLayout = () => {
- 
-
-  // useEffect(() => {
-  //   getData();
-  //   if (loaded) {
-  //     SplashScreen.hideAsync();
-  //   }
-  // }, [loaded]);
-
-  // if (!loaded) {
-  //   return null;
-  // }
-
-  return <Slot />;
-};
-
-export default RootLayout;
+export default function Layout() {
+  return (
+    <Stack
+      screenOptions={{
+        headerShown: false, // Disables the header for all child routes
+      }}
+    />
+  );
+}
