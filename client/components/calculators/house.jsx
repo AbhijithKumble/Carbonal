@@ -9,7 +9,7 @@ const House = ({
   livingSpace, setLivingSpace,
   waterUsageMultiplier, setWaterUsageMultiplier
 }) => {
-
+  
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>Home</Text>

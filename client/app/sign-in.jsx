@@ -1,11 +1,14 @@
+
 import React, { useEffect } from "react";
 import { Text, View, TextInput, Button, StyleSheet, Alert, Pressable } from "react-native";
 import { useForm, Controller } from "react-hook-form";
-import {
-  statusCodes,
-  GoogleSignin,
-} from '@react-native-google-signin/google-signin';
+// import {
 
+//   statusCodes,
+  
+//   GoogleSignin,
+// } from '@react-native-google-signin/google-signin';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { router } from "expo-router";
 import { FontAwesome5 } from '@expo/vector-icons';
 import axios from 'axios';
@@ -14,34 +17,41 @@ const androidClient="846065075010-1gf6p9hlhuk0gsdqd94rt0q2p1ilq311.apps.googleus
 const webid="846065075010-d2gagffur44lfgja4jbrkn0php103d27.apps.googleusercontent.com";
 const iosid="846065075010-its3uresv6ueijejsnhjvtetpoqo49s3.apps.googleusercontent.com";
 
-GoogleSignin.configure({
-  webClientId: webid, 
-  offlineAccess: true,
-  scopes: ['https://www.googleapis.com/auth/drive.readonly'],
-  forceCodeForRefreshToken: false,
-  iosClientId: iosid,
-  
-});
 
-const googlesignin = async () => {
-  try {
-      await GoogleSignin.hasPlayServices();
-      const userInfo = await GoogleSignin.signIn();
-      console.log("User Info:", userInfo);
-  } catch (error) {
-      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-          console.log("User cancelled the sign-in process.");
-      } else if (error.code === statusCodes.IN_PROGRESS) {
-          console.log("Sign-in is already in progress.");
-      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-          console.log("Play services are not available.");
-      } else {
-          console.log("Some other error:", error);
-      }
-  }
-};
+
+// GoogleSignin.configure({
+//   webClientId: webid, 
+//   offlineAccess: true,
+//   scopes: ['https://www.googleapis.com/auth/drive.readonly'],
+//   forceCodeForRefreshToken: false,
+//   iosClientId: iosid,
+  
+// });
+
+// const googlesignin = async () => {
+//   try {
+//       await GoogleSignin.hasPlayServices();
+//       const userInfo = await GoogleSignin.signIn();
+//       console.log("User Info:", userInfo);
+//   } catch (error) {
+//       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+//           console.log("User cancelled the sign-in process.");
+//       } else if (error.code === statusCodes.IN_PROGRESS) {
+//           console.log("Sign-in is already in progress.");
+//       } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+//           console.log("Play services are not available.");
+//       } else {
+//           console.log("Some other error:", error);
+//       }
+//   }
+// };
+
+
 
 const SignIn = () => {
+ 
+
+
   const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
       email: "",
@@ -51,27 +61,38 @@ const SignIn = () => {
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post("http://192.168.0.104:3000/signin", data);
+      const response = await axios.post("http://192.168.0.101:3000/signin", data);
   
       console.log("Server Response:", response.data);
   
       if (response.data.token) {
-     
-        router.push("/(app)");
+
+        AsyncStorage.setItem('token',response.data.data);
+        await AsyncStorage.setItem("isLoggedIn", "true");
+        await AsyncStorage.setItem("email", data.email);
+
+        router.push("/(app)"); 
+
       } else if(response.data.data==="User already present"){
-        router.push("/(app)");
+        
+        AsyncStorage.setItem('token',response.data.data);
+        await AsyncStorage.setItem("isLoggedIn", "true");
+        await AsyncStorage.setItem("email", data.email);
+
+        router.push("/(app)"); 
        
       }
       else {
         Alert.alert("Error", "Invalid credentials.");
       }
     } catch (error) {
-      console.error("Sign-up error:", error.response?.data || error.message);
+
+      Alert.alert("Sign-up error:",  error.message);
       if (error.response?.status === 401) {
         
-        // Alert.alert("Error", "Unauthorized: Invalid credentials or access.");
+        Alert.alert("Error", "Unauthorized: Invalid credentials or access.");
       } else {
-        // Alert.alert("Error", "Something went wrong. Please try again later.");
+        Alert.alert("Error", "Something went wrong. Please try again later.");
       }
     }
   };
@@ -130,15 +151,13 @@ const SignIn = () => {
         <Text style={styles.text} >Sign In</Text>
       </Pressable>
       
-      <Pressable style={styles.googleText} title="google" onPress={googlesignin}
+      <Pressable style={styles.googleText} title="google" onPress={console.log(1)}
         >
       <Text style={styles.text} >Log In With Google</Text>
       </Pressable>
     </View>
   );
 };
-
-export default SignIn;
 
 const styles = StyleSheet.create({
   container: {
@@ -195,3 +214,4 @@ const styles = StyleSheet.create({
   },
 });
 
+export default SignIn;

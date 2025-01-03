@@ -1,18 +1,27 @@
-import { Link, Stack } from "expo-router";
+import { Link, router, Stack, useRouter } from "expo-router";
 import React from "react";
-import { SafeAreaView, StyleSheet, View, Text, Pressable, Image, ImageBackground } from "react-native";
+import { SafeAreaView,StyleSheet, View, Text, Pressable, Image, ImageBackground, Button } from "react-native";
 import Welcome from './welcome';
 import Locationreact from './locations';
 import Profile from "./profile";
 import Leaderboard from "./leaderboard";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 
 const Index = () => {
-
+  const signOut=()=>{
+    
+    AsyncStorage.setItem('isLoggedIn','');
+    AsyncStorage.setItem('token','');
+    router.push("sign-in");
+    
+  }
   const handlePress = (buttonNumber) => {
     console.log(`Button ${buttonNumber} pressed`);
   };
-
+  
+  
   return (
 
 
@@ -22,56 +31,52 @@ const Index = () => {
       resizeMode="cover"
     >
       <SafeAreaView>
-        <Leaderboard />
-        <Profile />
-        <Locationreact />
-        <View style={styles.container}>
+      <Leaderboard/>
+      <Profile/>
+      <Locationreact/>
+      <View style={styles.container}>
+    
+        <Welcome/>
+          <Pressable style={styles.boxed} onPress={signOut}>
+            
+            <Text>SignOut</Text>
+          </Pressable>
+        <View style={styles.row1}>
+          <Link href="./(footprint)" asChild>
+          <Pressable style={styles.box} onPress={() => handlePress(1)}>
+            <Image
+              source={require("../../assets/images/footprint.jpeg")} // Replace with your image path
+              style={styles.image}
+            />
+            <Text style={styles.buttonText}>FOOTPRINT</Text>
+          </Pressable>
+          </Link>
 
-          <Welcome />
-
-          <View style={styles.row1}>
-
-            <Link href="./(footprint)" asChild>
-              <Pressable style={styles.box} onPress={() => handlePress(1)}>
-                <Image
-                  source={require("../../assets/images/footprint.jpeg")} // Replace with your image path
-                  style={styles.image}
-                />
-                <Text style={styles.buttonText}>FOOTPRINT</Text>
-              </Pressable>
-            </Link>
-
-            <Pressable style={styles.box} onPress={() => handlePress(2)}>
-              <Image
-                source={require("../../assets/images/quicktip.png")} // Replace with your image path
-                style={styles.image2}
-              />
-              <Text style={styles.buttonTexttips}>TIPS</Text>
-            </Pressable>
-          </View>
-
-          <View style={styles.row2}>
-
-            <Link href="./(challenges)" asChild>
-              <Pressable style={styles.box}>
-                <Image
-                  source={require("../../assets/images/challenges.jpeg")} // Replace with your image path
-                  style={styles.image}
-                />
-                <Text style={styles.buttonTextchallenge}>CHALLENGES</Text>
-              </Pressable>
-            </Link>
-
-            <Pressable style={styles.box} onPress={() => handlePress(4)}>
-              <Image
-                source={require("../../assets/images/progress.jpeg")} // Replace with your image path
-                style={styles.image}
-              />
-              <Text style={styles.buttonText}>PROGRESS</Text>
-            </Pressable>
-
-          </View>
-
+          <Pressable style={styles.box} onPress={() => handlePress(2)}>
+            <Image
+              source={require("../../assets/images/quicktip.png")} // Replace with your image path
+              style={styles.image2}
+            />
+            <Text style={styles.buttonTexttips}>TIPS</Text>
+          </Pressable>
+        </View>
+        <View style={styles.row2}>
+        
+          <Pressable style={styles.box} onPress={() => handlePress(3)}>
+            <Image
+              source={require("../../assets/images/challenges.jpeg")} // Replace with your image path
+              style={styles.image}
+            />
+            <Text style={styles.buttonTextchallenge}>CHALLENGES</Text>
+          </Pressable>
+          
+          <Pressable style={styles.box} onPress={() => handlePress(4)}>
+            <Image
+              source={require("../../assets/images/progress.jpeg")} // Replace with your image path
+              style={styles.image}
+            />
+            <Text style={styles.buttonText}>PROGRESS</Text>
+          </Pressable>
         </View>
       </SafeAreaView>
     </ImageBackground>
@@ -86,6 +91,25 @@ const styles = StyleSheet.create({
     flex: 1,
 
   },
+  boxed:{
+    position:"absolute",
+    width: 60,
+    marginTop:-40,
+    maxWidth: "width" * 0.9,
+    height: 40,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(255, 255, 255, 0.9)", 
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 5,
+  },
+  
   container: {
     flex: 1,
 
@@ -122,6 +146,7 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 5,
   },
+  
   image: {
     width: 160,
     maxWidth: "width" * 0.9,

@@ -37,6 +37,12 @@
           <string>exp+carbonal</string>
         </array>
       </dict>
+      <dict>
+        <key>CFBundleURLSchemes</key>
+        <array>
+          <string>com.googleusercontent.apps.846065075010-its3uresv6ueijejsnhjvtetpoqo49s3</string>
+        </array>
+      </dict>
     </array>
     <key>CFBundleVersion</key>
     <string>1</string>
