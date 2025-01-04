@@ -9,9 +9,7 @@ const userSchema = new mongoose.Schema({
   datejoined:{type: String},
   name:{type:String},
   footprint:{type:Number},
-  
   dateJoined: { type: Date, required: true ,default: Date.now },
-  
 });
 
 const User = mongoose.model('UserInfo', userSchema);
