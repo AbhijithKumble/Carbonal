@@ -96,8 +96,12 @@ const SignIn = () => {
       }
     }
   };
+/*
+  const handleError = () => {
+    Alert.alert("Form Error", "Please fill in all fields correctly.");
+  };
+*/
 
-  
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Sign In</Text>
@@ -118,7 +122,7 @@ const SignIn = () => {
             placeholder="Email"
             onBlur={onBlur}
             onChangeText={onChange}
-            value={value.email}
+            value={value.email.email}
           />
         )}
       />
