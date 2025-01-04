@@ -19,7 +19,7 @@ const SignUp = () => {
 
     if (data.email && data.password && data.name) {
       try {
-        const response = await axios.post("http://192.168.0.101:3000/signup", {
+        const response = await axios.post("http://192.168.0.100:3000/signup", {
           name: data.name,
           email: data.email,
           password: data.password,
