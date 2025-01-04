@@ -61,15 +61,17 @@ const Index = () => {
           </Pressable>
         </View>
         <View style={styles.row2}>
-        
+        <Link href="./(challenges)" asChild>
           <Pressable style={styles.box} onPress={() => handlePress(3)}>
+         
             <Image
               source={require("../../assets/images/challenges.jpeg")} // Replace with your image path
               style={styles.image}
             />
             <Text style={styles.buttonTextchallenge}>CHALLENGES</Text>
+       
           </Pressable>
-          
+          </Link>
           <Pressable style={styles.box} onPress={() => handlePress(4)}>
             <Image
               source={require("../../assets/images/progress.jpeg")} // Replace with your image path
@@ -77,6 +79,7 @@ const Index = () => {
             />
             <Text style={styles.buttonText}>PROGRESS</Text>
           </Pressable>
+        </View>
         </View>
       </SafeAreaView>
     </ImageBackground>

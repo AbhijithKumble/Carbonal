@@ -10,7 +10,7 @@ const Leaderboard = () => {
   useEffect(() => {
     const fetchLeaderboardData = async () => {
       try {
-        const response = await axios.get("http://192.168.0.101:3000/leaderboard"); // Update with your server URL
+        const response = await axios.get("http://192.168.0.100:3000/leaderboard"); // Update with your server URL
         setLeaderboardData(response.data);
       } catch (error) {
         console.error("Error fetching leaderboard data:", error);
