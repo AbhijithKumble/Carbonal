@@ -9,7 +9,6 @@ import {
   Image,
   ImageBackground,
 } from "react-native";
-import { SafeAreaView, StyleSheet, View, Text, Pressable, Image, ImageBackground } from "react-native";
 import Welcome from "./welcome";
 import Locationreact from "./locations";
 import Profile from "./profile";
