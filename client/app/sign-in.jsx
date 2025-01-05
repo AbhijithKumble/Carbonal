@@ -70,7 +70,7 @@ const SignIn = () => {
         AsyncStorage.setItem('token',response.data.data);
         await AsyncStorage.setItem("isLoggedIn", "true");
         await AsyncStorage.setItem("email", data.email);
-
+        await AsyncStorage.setItem('userId', response.data.userId); 
         router.push("/(app)"); 
 
       } else if(response.data.data==="User already present"){

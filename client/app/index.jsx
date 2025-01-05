@@ -5,22 +5,30 @@ import AsyncStorage from "@react-native-async-storage/async-storage"; // Import 
 import { useEffect, useState } from "react";
 import Index from "./(app)";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const LoginNav = () => {
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.main}>
-        <Text style={styles.title}>
-          Welcome! How would you like to take your first step towards sustainability?
-        </Text>
-        <Link style={styles.sign} href="/sign-in">
-          <Text style={styles.buttonText}>Sign In</Text>
-        </Link>
-        <Link style={styles.sign} href="/sign-up">
-          <Text style={styles.buttonText}>Sign Up</Text>
-        </Link>
-      </View>
-    </SafeAreaView>
+    
+    <GestureHandlerRootView>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.main}>
+          <Text style={styles.title}>
+            Welcome! How would you like to take your first step towards sustainability?
+          </Text>
+          <Link style={styles.sign} href="/sign-in">
+            <Text style={styles.buttonText}>Sign In</Text>
+          </Link>
+          <Link style={styles.sign} href="/sign-up">
+            <Text style={styles.buttonText}>Sign Up</Text>
+          </Link>
+
+          <Link style={styles.sign} href="./(app)">
+            <Text style={styles.buttonText}>index</Text>
+          </Link>
+        </View>
+      </SafeAreaView>
+    </GestureHandlerRootView>
   );
 };
 
@@ -47,7 +55,7 @@ const Page = () => {
   return (
     <View style={{ flex: 1 }}>
       {isLoggedIn ? <HomeNav /> : <LoginNav />}
- 
+
     </View>
   );
 };

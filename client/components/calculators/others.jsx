@@ -1,5 +1,7 @@
-import React from 'react';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
 const Others = ({
   phones, setPhones,
@@ -7,6 +9,49 @@ const Others = ({
   otherGadgets, setOtherGadgets
 }) => {
 
+  const [Id, setId] = useState("");
+  useEffect(() => {
+    const fetchId = async () => {
+      try {
+        const storedId = await AsyncStorage.getItem("userId");
+        if (storedId) {
+          setId(storedId);
+
+        } else {
+          console.error("Id is not available.");
+        }
+      } catch (err) {
+        console.error("Error retrieving Id from AsyncStorage:", err);
+      }
+    };
+    fetchId();
+  }, []);
+
+  // Update electricity units in the backend
+  const updateOthers = async () => {
+   
+    if (!Id) {
+      console.error("Cannot update: User ID is not available.");
+      return;
+    }
+
+    try {
+      console.log(Id);
+      const response = await axios.put(`http://192.168.0.101:3000/usage/${Id}`, {
+        phones:parseFloat(phones),
+        laptopsDesktops:parseFloat(laptopsDesktops),
+        otherGadgets:parseFloat(otherGadgets),
+      });
+
+      if (response.status === 200) {
+        console.log("Electricity units updated successfully:", response.data);
+      } else {
+        console.error("Failed to update electricity units:", response.data);
+      }
+    } catch (err) {
+      console.error("Error updating electricity units:",  err.response?.data||err.message);
+    }
+  };
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>Others</Text>
@@ -34,6 +79,9 @@ const Others = ({
           value={otherGadgets}
           onChangeText={setOtherGadgets}
         />
+         <Pressable onPress={updateOthers} style={styles.saveButton}>
+          <Text style={styles.saveText}>SAVE</Text>
+        </Pressable>
       </View>
     </View>
   );
