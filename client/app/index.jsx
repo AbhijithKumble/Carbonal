@@ -9,6 +9,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const LoginNav = () => {
   return (
+
     <GestureHandlerRootView>
       <SafeAreaView style={styles.container}>
         <View style={styles.main}>

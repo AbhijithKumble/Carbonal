@@ -1,13 +1,14 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-
+import ip from './ip.js'
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
 
 import User from './models/User.model.js';
 
+import Usages from './models/Usages.model.js'; // Adjust the path to the Usages model file
 
 dotenv.config();
 
@@ -33,51 +34,36 @@ app.get('/', (req, res) => {
 
 // Improved Signup Route
 
-app.post('/signup', async (req, res) => {
-  const { email, password, name } = req.body;
-
+app.post('/signin', async (req, res) => {
+  const { email, password } = req.body;
   try {
-    // Check if the email already exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ error: 'User already exists' });
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid email or password. User not found.' });
     }
 
-    // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: 'Invalid email or password. Password mismatch.' });
+    }
 
-    // Create the new user
-    const newUser = new User({
-      email,
-      password: hashedPassword,
-      name,
-      dateJoined: new Date(), // Set dateJoined as the current date
-    });
-
-    // Save the new user
-    await newUser.save();
-
-    // Generate a JWT token
     const token = jwt.sign(
-      { userId: newUser._id, email: newUser.email }, 
-      'your_jwt_secret_key', // Replace with a secret key
-      { expiresIn: '1h' } // Token expiration time
+      { userId: user._id, email: user.email },
+      process.env.JWT_SECRET || 'fallback_secret_key', // Fallback for debugging
+      { expiresIn: '1h' }
     );
-    res.json({ token });
-    // Send the token in the response
-    
 
+    res.json({ userId: user._id, token });
   } catch (error) {
-    console.error('Error during signup:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error('Signin error:', error); // Log error details
+    res.status(500).json({ message: 'Internal Server Error.', error: error.message });
   }
 });
 
-// Improved Login Route
+
+
 app.post('/signin', async (req, res) => {
   const { email, password} = req.body;
-
-
   try {
     const user = await User.findOne({ email });
     if (!user) {
@@ -88,9 +74,16 @@ app.post('/signin', async (req, res) => {
     if (!isPasswordValid) {
       return res.status(401).json({ message: 'Invalid email or password.' });
     }
-
-    const token = jwt.sign({ email: user.email }, 'your_secret_key', { expiresIn: '1h' });
-    res.json({ token });
+    const token = jwt.sign(
+      { userId: user._id, email: user.email },
+      process.env.JWT_SECRET, // Set this in your environment variables
+      { expiresIn: '1h' }
+    );
+    
+    res.json({
+      userId: user._id, // Send userId
+      token: token,      // Send JWT token
+    });
   } catch (error) {
     res.status(500).json({ message: 'Error logging in.', error });
   }
@@ -164,7 +157,60 @@ app.get('/protected', authenticateToken, (req, res) => {
   res.json({ message: `Welcome, ${req.user.email}! This is a protected route.` });
 });
 
-// Start the server
+app.put('/usage/:userId', async (req, res) => {
+  try {
+    const { userId } = req.params; // Extract userId from the URL
+    const { electricityUnits, fossilFuelCost,meatFishKg,petrolLitres,dieselLitres,phones,laptopsDesktops,otherGadgets } = req.body; // Get data from the request body
+
+    // if (!electricityUnits && !fossilFuelCost&&!meatFishKg&&!petrolLitres&&!dieselLitres) {
+    //   return res.status(400).json({ error: 'At least one field must be provided for update.' });
+    // }
+
+    // Prepare the update object dynamically
+    const updateData = {};
+    if (electricityUnits) updateData.electricityUnits = electricityUnits;
+    if (fossilFuelCost) updateData.fossilFuelCost = fossilFuelCost;
+    if(meatFishKg) updateData.meatFishKg = meatFishKg;
+    if(petrolLitres) updateData.petrolLitres=petrolLitres;
+    if(dieselLitres) updateData.dieselLitres=dieselLitres;
+    if(phones) updateData.phones=phones;
+    if(laptopsDesktops) updateData.laptopsDesktops=laptopsDesktops;
+    if(otherGadgets) updateData.otherGadgets=otherGadgets;
+    
+    // Update the Usages document in the database
+    const updatedUsage = await Usages.findOneAndUpdate(
+      { userId }, // Filter by userId
+      { $set: updateData }, // Update fields
+      { new: true, upsert: true } // Return updated document, create new if not found
+    );
+
+    if (!updatedUsage) {
+      return res.status(404).json({ error: 'No usage record found for the given userId.' });
+    }
+
+    res.status(200).json({ message: 'Usage data updated successfully', data: updatedUsage });
+  } catch (error) {
+    console.error('Error updating usage data:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+app.get('/usage/:userId', async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const usage = await Usages.findOne({ userId });
+
+    if (!usage) {
+      return res.status(404).json({ error: 'No usage data found for the given userId.' });
+    }
+
+    res.status(200).json(usage);
+  } catch (error) {
+    console.error('Error fetching usage data:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 app.listen(PORT, () => {
-  console.log(`Server running on http://192.168.0.100:${PORT}`);
+  console.log(`Server running on ${ip}`);
 });

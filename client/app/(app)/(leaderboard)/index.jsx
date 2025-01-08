@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, FlatList } from "react-native";
 import axios from "axios";
-
+import ip from '../../../utils/ip.js'
 const Leaderboard = () => {
   const [leaderboardData, setLeaderboardData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -10,7 +10,8 @@ const Leaderboard = () => {
   useEffect(() => {
     const fetchLeaderboardData = async () => {
       try {
-        const response = await axios.get("http://192.168.0.101:3000/leaderboard"); // Update with your server URL
+        console.log(ip);
+        const response = await axios.get(ip+"/leaderboard"); // Update with your server URL
         setLeaderboardData(response.data);
       } catch (error) {
         console.error("Error fetching leaderboard data:", error);
@@ -23,12 +24,14 @@ const Leaderboard = () => {
   }, []);
 
   const renderItem = ({ item, index }) => (
-    <View style={styles.row}>
+    <View style={styles.rowBox}>
       <Text style={styles.rank}>{index + 1}</Text>
       <Text style={styles.name}>{item.name}</Text>
-      <Text style={styles.points}>{item.footprint}</Text>
+      <Text style={styles.points}>{item.footprint} Points</Text>
     </View>
   );
+  
+  
 
   return (
     <View style={styles.container}>
@@ -52,7 +55,6 @@ const Leaderboard = () => {
 };
 
 export default Leaderboard;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -61,10 +63,11 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 28,
-    fontWeight: "bold",
+
     marginBottom: 20,
     textAlign: "center",
     color: "#0d522c",
+    fontFamily:"Blimps",
   },
   tableHeader: {
     flexDirection: "row",
@@ -72,38 +75,52 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderBottomWidth: 1,
     borderBottomColor: "#ccc",
+    fontFamily:"Blimps",
   },
   tableHeaderText: {
     fontSize: 16,
-    fontWeight: "bold",
-    color: "#555",
+    
+    color: "#0d522c",
+    fontFamily:"Blimps",
   },
-  row: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#eee",
+  rowBox: {
+    flexDirection: "row", // Arrange items in a row
+    alignItems: "center",
+    justifyContent: "space-between", // Add space between Rank, Name, and Points
+    backgroundColor: "#77bba2", // Light green background
+    borderWidth: 2,
+    borderColor: "#c3e6cb", // Light green border
+    borderRadius: 12, // Rounded corners
+    padding: 10, // Padding inside the box
+    marginVertical: 5, // Space between rows
+    fontFamily:"Blimps",
   },
   rank: {
     fontSize: 16,
-    fontWeight: "bold",
-    color: "#333",
-    width: "20%",
+    color: "#0d522c", // Dark green text
+    
+    width: "20%", // Allocate space for Rank
+    textAlign: "center",
+    fontFamily:"Blimps",
   },
   name: {
     fontSize: 16,
-    color: "#333",
-    width: "50%",
+    color: "#0d522c", // Dark green text
+    
+    width: "50%", // Allocate space for Name
+    textAlign: "center",
+    fontFamily:"Blimps",
   },
   points: {
     fontSize: 16,
-    fontWeight: "bold",
-    color: "#333",
-    width: "30%",
+    color: "#0d522c", // Dark green text
+    
+    width: "30%", // Allocate space for Points
     textAlign: "right",
+    fontFamily:"Blimps",
   },
   loading: {
+    fontFamily:"Blimps",
     textAlign: "center",
     fontSize: 18,
     marginTop: 20,

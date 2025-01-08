@@ -19,7 +19,7 @@ const SignUp = () => {
 
     if (data.email && data.password && data.name) {
       try {
-        const response = await axios.post("http://192.168.0.100:3000/signup", {
+        const response = await axios.post("http://192.168.0.101:3000/signup", {
           name: data.name,
           email: data.email,
           password: data.password,
@@ -27,12 +27,15 @@ const SignUp = () => {
         });
 
         if (response.data.token) {
+
+      const { token, userId } = response.data; // Extract userId from the response
+
           Alert.alert("Success", "Sign-up successful!");
           reset(); // Clear the form
-          AsyncStorage.setItem('token',response.data.data);
+          AsyncStorage.setItem('token',token);
           await AsyncStorage.setItem("isLoggedIn", "true");
           await AsyncStorage.setItem("email", data.email);
-  
+          await AsyncStorage.setItem('userId', userId);
         router.push("/(app)"); 
         } else {
           Alert.alert("Error", "Sign-up failed. Please try again.");

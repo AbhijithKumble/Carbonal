@@ -8,6 +8,7 @@ import { useForm, Controller } from "react-hook-form";
   
 //   GoogleSignin,
 // } from '@react-native-google-signin/google-signin';
+import ip from '../utils/ip.js'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { router } from "expo-router";
 import { FontAwesome5 } from '@expo/vector-icons';
@@ -16,8 +17,6 @@ import axios from 'axios';
 const androidClient="846065075010-1gf6p9hlhuk0gsdqd94rt0q2p1ilq311.apps.googleusercontent.com";
 const webid="846065075010-d2gagffur44lfgja4jbrkn0php103d27.apps.googleusercontent.com";
 const iosid="846065075010-its3uresv6ueijejsnhjvtetpoqo49s3.apps.googleusercontent.com";
-
-
 
 // GoogleSignin.configure({
 //   webClientId: webid, 
@@ -51,6 +50,8 @@ const iosid="846065075010-its3uresv6ueijejsnhjvtetpoqo49s3.apps.googleuserconten
 const SignIn = () => {
  
 
+  console.log(ip);
+
 
   const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
@@ -61,21 +62,22 @@ const SignIn = () => {
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post("http://192.168.0.101:3000/signin", data);
+      
+      const response = await axios.post(ip+"/signin", data);
   
       console.log("Server Response:", response.data);
   
       if (response.data.token) {
-
+        
         AsyncStorage.setItem('token',response.data.data);
         await AsyncStorage.setItem("isLoggedIn", "true");
         await AsyncStorage.setItem("email", data.email);
-
+        await AsyncStorage.setItem('userId', response.data.userId); 
         router.push("/(app)"); 
 
       } else if(response.data.data==="User already present"){
         
-        AsyncStorage.setItem('token',response.data.data);
+        await AsyncStorage.setItem('token',response.data.data);
         await AsyncStorage.setItem("isLoggedIn", "true");
         await AsyncStorage.setItem("email", data.email);
 
@@ -92,6 +94,7 @@ const SignIn = () => {
         
         Alert.alert("Error", "Unauthorized: Invalid credentials or access.");
       } else {
+        console.log(error);
         Alert.alert("Error", "Something went wrong. Please try again later.");
       }
     }
@@ -147,12 +150,13 @@ const SignIn = () => {
       />
       {errors.password && <Text style={styles.errorText}>{errors.password.message}</Text>}
 
-      <Pressable style={styles.googleText} title="google signin"  onPress={handleSubmit(onSubmit)} >
+      <View>
+      <Pressable style={styles.googleText}  onPress={handleSubmit(onSubmit)} >
         <Text style={styles.text} >Sign In</Text>
       </Pressable>
+      </View>
       
-      <Pressable style={styles.googleText} title="google" onPress={console.log(1)}
-        >
+      <Pressable style={styles.googleText} title="google" >
       <Text style={styles.text} >Log In With Google</Text>
       </Pressable>
     </View>
