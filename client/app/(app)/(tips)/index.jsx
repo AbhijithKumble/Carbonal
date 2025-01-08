@@ -1,3 +1,4 @@
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -181,3 +182,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 });
+
+
+export default Tips;
+
