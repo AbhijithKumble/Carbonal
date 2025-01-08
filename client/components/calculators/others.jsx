@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import ip from '../../utils/ip';
 
 const Others = ({
   phones, setPhones,
@@ -37,7 +38,7 @@ const Others = ({
 
     try {
       console.log(Id);
-      const response = await axios.put(`http://192.168.0.101:3000/usage/${Id}`, {
+      const response = await axios.put(ip+`/usage/${Id}`, {
         phones:parseFloat(phones),
         laptopsDesktops:parseFloat(laptopsDesktops),
         otherGadgets:parseFloat(otherGadgets),
@@ -90,6 +91,19 @@ const Others = ({
 const styles = StyleSheet.create({
   container: {
     // ... other container styles from Location component
+  },
+  saveButton: {
+    backgroundColor: "#28a745",
+    borderRadius: 8,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    alignItems: "center",
+    marginVertical: 10,
+  },
+  saveText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
   },
   heading: {
     fontFamily: 'Blimps',

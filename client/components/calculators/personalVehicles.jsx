@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import ip from '../../utils/ip';
 
 const PersonalVehicles = ({
   petrolLitres, setPetrolLitres,
@@ -36,7 +37,7 @@ const PersonalVehicles = ({
 
     try {
       console.log(Id);
-      const response = await axios.put(`http://192.168.0.101:3000/usage/${Id}`, {
+      const response = await axios.put(ip+`/usage/${Id}`, {
        petrolLitres:parseFloat(petrolLitres),
        dieselLitres:parseFloat(dieselLitres),
       });
@@ -47,7 +48,7 @@ const PersonalVehicles = ({
         console.error("Failed to update electricity units:", response.data);
       }
     } catch (err) {
-      console.error("Error updating electricity units:",  err.response?.data||err.message);
+      console.error("Error updating personal units:",  err.response?.data||err.message);
     }
   };
   return (

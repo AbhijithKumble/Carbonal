@@ -3,6 +3,7 @@ import { Button, Pressable, StyleSheet, Text, TextInput, View } from "react-nati
 import Slider from "@react-native-community/slider";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import ip from "../../utils/ip";
 
 const House = ({
   electricityUnits, setElectricityUnits,
@@ -41,7 +42,7 @@ const House = ({
 
     try {
       console.log(Id);
-      const response = await axios.put(`http://192.168.0.101:3000/usage/${Id}`, {
+      const response = await axios.put(ip+`/usage/${Id}`, {
         electricityUnits: parseFloat(electricityUnits),
         fossilFuelCost: parseFloat(electricityUnits),
        
