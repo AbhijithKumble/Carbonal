@@ -2,6 +2,7 @@ import { Button, StyleSheet, Text, View } from "react-native";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import ip from "../../utils/ip";
 
 const TotalFootPrint = ({ totalFootprint }) => {
   const [email, setEmail] = useState("");

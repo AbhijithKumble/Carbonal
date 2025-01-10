@@ -4,6 +4,7 @@ import { useForm, Controller } from "react-hook-form";
 import axios from "axios";
 import { router } from "expo-router"; 
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import ip from '../utils/ip.js'
 const SignUp = () => {
   const { control, handleSubmit, watch, formState: { errors }, reset } = useForm({
     defaultValues: {
@@ -19,14 +20,14 @@ const SignUp = () => {
 
     if (data.email && data.password && data.name) {
       try {
-        const response = await axios.post("http://192.168.0.101:3000/signup", {
+        const response = await axios.post(ip+"/signup", {
           name: data.name,
           email: data.email,
           password: data.password,
           dateJoined: new Date().toISOString(), // Automatically include current date
         });
 
-        if (response.data.token) {
+        if (response.data.token && response.data.userId) {
 
       const { token, userId } = response.data; // Extract userId from the response
 

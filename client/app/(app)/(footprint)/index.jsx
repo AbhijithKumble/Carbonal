@@ -8,6 +8,7 @@ import Food from "../../../components/calculators/food";
 import PersonalVehicles from "../../../components/calculators/personalVehicles";
 import Others from "../../../components/calculators/others";
 import TotalFootPrint from "../../../components/calculators/totalFootprint";
+import ip from "../../../utils/ip";
 
 const Index = () => {
   const [pressedButton, setPressedButton] = useState(0);
