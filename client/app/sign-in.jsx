@@ -62,44 +62,32 @@ const SignIn = () => {
 
   const onSubmit = async (data) => {
     try {
-      
-      const response = await axios.post(ip+"/signin", data);
+      const response = await axios.post(ip + "/signin", data);
   
       console.log("Server Response:", response.data);
   
       if (response.data.token) {
-        
-        AsyncStorage.setItem('token',response.data.data);
+        const { token, userId } = response.data; // Extract userId from response
+  
+        await AsyncStorage.setItem('token', token);
         await AsyncStorage.setItem("isLoggedIn", "true");
         await AsyncStorage.setItem("email", data.email);
-        await AsyncStorage.setItem('userId', response.data.userId); 
-        router.push("/(app)"); 
-
-      } else if(response.data.data==="User already present"){
-        
-        await AsyncStorage.setItem('token',response.data.data);
-        await AsyncStorage.setItem("isLoggedIn", "true");
-        await AsyncStorage.setItem("email", data.email);
-
-        router.push("/(app)"); 
-       
-      }
-      else {
+        await AsyncStorage.setItem("userId", userId); // Store userId in AsyncStorage
+  
+        router.push("/(app)");
+      } else {
         Alert.alert("Error", "Invalid credentials.");
       }
     } catch (error) {
-
-      Alert.alert("Sign-up error:",  error.message);
+      console.error("Sign-in error:", error);
       if (error.response?.status === 401) {
-        
         Alert.alert("Error", "Unauthorized: Invalid credentials or access.");
       } else {
-        console.log(error);
         Alert.alert("Error", "Something went wrong. Please try again later.");
       }
     }
   };
-
+  
   
   return (
     <View style={styles.container}>

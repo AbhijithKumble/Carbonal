@@ -128,8 +128,7 @@ app.post('/signup', async (req, res) => {
 
 // Improved Login Route
 app.post('/signin', async (req, res) => {
-  const { email, password} = req.body;
-
+  const { email, password } = req.body;
 
   try {
     const user = await User.findOne({ email });
@@ -143,7 +142,10 @@ app.post('/signin', async (req, res) => {
     }
 
     const token = jwt.sign({ email: user.email }, 'your_secret_key', { expiresIn: '1h' });
-    res.json({ token });
+    res.json({ 
+      token, 
+      userId: user._id // Include the userId in the response
+    });
   } catch (error) {
     res.status(500).json({ message: 'Error logging in.', error });
   }
