@@ -1,4 +1,4 @@
-import mongoose, { model } from 'mongoose';
+import mongoose from 'mongoose';
 
 const Quotes=new mongoose.Schema({
     quote:{type:String }

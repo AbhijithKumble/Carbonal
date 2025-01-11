@@ -1,31 +1,34 @@
-import { Link, router, Stack } from "expo-router";
 import React from "react";
-import { SafeAreaView,StyleSheet, View, Text, Pressable, Image, ImageBackground } from "react-native";
+import { Link, router } from "expo-router";
 import Welcome from './welcome';
 import Locationreact from './locations';
+import {
+  SafeAreaView,
+  View,
+  Text,
+  Pressable,
+  Image,
+  ImageBackground,
+  StyleSheet,
+} from "react-native";
+
 import Profile from "./profile";
 import Leaderboard from "./leaderboard";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-
 const Index = () => {
+
+  const signOut = () => {
+    AsyncStorage.setItem('isLoggedIn', '');
+    AsyncStorage.setItem('token', '');
+    router.push("sign-in");
+  };
 
   const handlePress = (buttonNumber) => {
     console.log(`Button ${buttonNumber} pressed`);
   };
 
-  const signOut = () => {
-
-    AsyncStorage.setItem('isLoggedIn', '');
-    AsyncStorage.setItem('userId', '');
-    AsyncStorage.setItem('token', '');
-    router.push("sign-in");
-
-  }
- 
-
-
-  return (
+return (
     <ImageBackground
       source={require("../../assets/images/leavesdark.jpeg")} // Replace with your background image
       style={styles.background}
@@ -38,7 +41,6 @@ const Index = () => {
         <View style={styles.container}>
           <Welcome />
           <Pressable style={styles.boxed} onPress={signOut}>
-            
             <Text>SignOut</Text>
           </Pressable>
           <View style={styles.row1}>
@@ -88,7 +90,6 @@ const Index = () => {
       </SafeAreaView>
     </ImageBackground>
   );
-  
 };
 
 export default Index;
@@ -96,31 +97,26 @@ export default Index;
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    
   },
   container: {
     flex: 1,
-
     backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent overlay
   },
   row1: {
     flexDirection: "row",
     justifyContent: "space-around",
     marginTop:180,
-    
-   
   },
   row2: {
     flexDirection: "row",
     justifyContent: "space-around",
-    
-  
     marginTop:170,
     
   },
   boxed:{
     position:"absolute",
     width: 60,
+    marginLeft: 10,
     marginTop:-40,
     maxWidth: "width" * 0.9,
     height: 40,
@@ -161,8 +157,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 10,
     elevation: 5,
-    
-   
   },
   image2: {
     width:160,
@@ -170,9 +164,7 @@ const styles = StyleSheet.create({
     height: 160,
     justifyContent: "center",
     alignItems: "center",
-    
     borderRadius: 10,
- 
     elevation: 5,
   },  
     buttonText: {
@@ -182,7 +174,6 @@ const styles = StyleSheet.create({
       transform: [{ translateX: -50 }, { translateY: -50 }], // Centers the text
       color: "#fff",
       fontSize: 28,
-      
       textAlign: "center",
       fontFamily:'Blimps',
     },
@@ -193,7 +184,6 @@ const styles = StyleSheet.create({
     transform: [{ translateX: -50 }, { translateY: -50 }], // Centers the text
     color: "#fff",
     fontSize: 28,
-    
     textAlign: "center",
     fontFamily:'Blimps',
   },
@@ -204,7 +194,6 @@ const styles = StyleSheet.create({
     transform: [{ translateX: -50 }, { translateY: -50 }], // Centers the text
     color: "#fff",
     fontSize: 28,
-    
     textAlign: "center",
     fontFamily:'Blimps',
   },

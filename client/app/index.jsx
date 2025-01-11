@@ -1,6 +1,5 @@
 import { Link } from "expo-router";
-import { Button, StyleSheet, Text, View } from "react-native";
-import { router } from "expo-router";
+import { StyleSheet, Text, View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage"; // Import AsyncStorage
 import { useEffect, useState } from "react";
 import Index from "./(app)";
@@ -9,7 +8,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const LoginNav = () => {
   return (
-    
+
     <GestureHandlerRootView>
       <SafeAreaView style={styles.container}>
         <View style={styles.main}>
@@ -21,10 +20,6 @@ const LoginNav = () => {
           </Link>
           <Link style={styles.sign} href="/sign-up">
             <Text style={styles.buttonText}>Sign Up</Text>
-          </Link>
-
-          <Link style={styles.sign} href="./(app)">
-            <Text style={styles.buttonText}>index</Text>
           </Link>
         </View>
       </SafeAreaView>
@@ -65,6 +60,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     padding: 24,
+    backgroundColor: "#c2d8d1",
   },
   main: {
     flex: 1,
@@ -74,7 +70,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 32,
-    fontWeight: "bold",
+    fontFamily: 'Blimps',
     textAlign: "center",
   },
   sign: {
