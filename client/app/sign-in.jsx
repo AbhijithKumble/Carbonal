@@ -48,7 +48,7 @@ const iosid = "846065075010-its3uresv6ueijejsnhjvtetpoqo49s3.apps.googleusercont
 
 const SignIn = () => {
 
-  console.log(ip);
+ 
 
   const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
@@ -60,7 +60,7 @@ const SignIn = () => {
   const onSubmit = async (data) => {
     try {
       const response = await axios.post(`${ip}/auth/signin`, data);
-      console.log("Server Response:", response);
+      
       if (response.data.token) {
         await AsyncStorage.setItem('token', response.data.token);
         await AsyncStorage.setItem("isLoggedIn", "true");

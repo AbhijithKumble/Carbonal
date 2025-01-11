@@ -120,8 +120,8 @@ router.post("/complete", authenticateToken, async (req, res) => {
     });
     //console.log(userId,challengeId,date)
     //const today = date.split('T')[0]
-    console.log(userId, challengeId, date.split('T')[0]);
-    console.log(userChallenge); 
+    // console.log(userId, challengeId, date.split('T')[0]);
+    // console.log(userChallenge); 
 
     if (!userChallenge) {
       return res.status(404).json({ message: "UserChallenge not found" });

@@ -25,7 +25,7 @@ const Index = () => {
   };
 
   const handlePress = (buttonNumber) => {
-    console.log(`Button ${buttonNumber} pressed`);
+    // console.log(`Button ${buttonNumber} pressed`);
   };
 
 return (

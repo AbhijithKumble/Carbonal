@@ -12,7 +12,7 @@ router.post('/footprint', async (req, res) => {
     );
     res.send({ status: 'ok', data: 'Updated' });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     res.status(500).send({ status: 'error', data: 'Internal Server Error' });
   }
 });

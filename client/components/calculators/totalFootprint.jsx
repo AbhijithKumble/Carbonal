@@ -48,7 +48,7 @@ const TotalFootPrint = ({ totalFootprint }) => {
       email: email,
       footprint: totalFootprint,
     };
-    console.log("Email:", email);
+    // console.log("Email:", email);
     axios
       .post(ip+"/footprint", formdata)
       .then((res) => console.log(res.data))
@@ -60,13 +60,13 @@ const TotalFootPrint = ({ totalFootprint }) => {
       return;
     }
     try {
-      console.log(totalFootprint);
+      // console.log(totalFootprint);
       const response=await axios.put(ip+`/usage/${Id}`,{
         footprint:totalFootprint,
       });
-      console.log(response.data);
+      // console.log(response.data);
     } catch (error) {
-      console.log("h"+error);
+      // console.log("h"+error);
     }
   }
 

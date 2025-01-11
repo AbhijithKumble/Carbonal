@@ -38,10 +38,10 @@ const Page = () => {
     const getData = async () => {
       try {
         const data = await AsyncStorage.getItem("isLoggedIn");
-        console.log("Retrieved isLoggedIn:", data);
+        
         setisLoggedIn(data === "true"); // Boolean comparison
       } catch (error) {
-        console.error("Error reading AsyncStorage:", error);
+        
         setisLoggedIn(false); // Default to false on error
       }
     };

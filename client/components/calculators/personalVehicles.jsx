@@ -36,7 +36,7 @@ const PersonalVehicles = ({
     }
 
     try {
-      console.log(Id);
+      // console.log(Id);
       const response = await axios.put(ip+`/usage/${Id}`, {
        petrolLitres:parseFloat(petrolLitres),
        dieselLitres:parseFloat(dieselLitres),
