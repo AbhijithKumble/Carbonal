@@ -86,7 +86,7 @@ router.get('/usage/:userId', async (req, res) => {
   const { userId } = req.params;
 
   try {
-    const usageData = await Usages.find({ userId: userId }).sort({ currentYear: -1, currentMonth: -1 });
+    const usageData = await Usages.find({ userId: userId }).sort({ currentYear: 1, currentMonth: 1 });
     if (!usageData) {
       return res.status(404).json({ error: 'No usage data found for the given userId.' });
     }
