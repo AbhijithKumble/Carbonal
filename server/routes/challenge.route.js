@@ -32,6 +32,7 @@ router.post('/addchallenges', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
 // Get today's challenge for the user
 router.get('/today', authenticateToken, async (req, res) => {
   try {

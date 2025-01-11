@@ -59,27 +59,19 @@ const SignIn = () => {
 
   const onSubmit = async (data) => {
     try {
-
       const response = await axios.post(`${ip}/auth/signin`, data);
-
       console.log("Server Response:", response);
-
       if (response.data.token) {
-
         await AsyncStorage.setItem('token', response.data.token);
         await AsyncStorage.setItem("isLoggedIn", "true");
         await AsyncStorage.setItem("email", data.email);
         await AsyncStorage.setItem('userId', response.data.userId);
         router.push("/(app)");
-
       } else if (response.data.data === "User already present") {
-
         await AsyncStorage.setItem('token', response.data.token);
         await AsyncStorage.setItem("isLoggedIn", "true");
         await AsyncStorage.setItem("email", data.email);
-
         router.push("/(app)");
-
       }
       else {
         Alert.alert("Error", "Invalid credentials.");
@@ -88,15 +80,13 @@ const SignIn = () => {
 
       Alert.alert("Sign-up error:", error.message);
       if (error.response?.status === 401) {
-
         Alert.alert("Error", "Unauthorized: Invalid credentials or access.");
       } else {
-        console.log(error);
         Alert.alert("Error", "Something went wrong. Please try again later.");
       }
     }
   };
-
+  
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Sign In</Text>

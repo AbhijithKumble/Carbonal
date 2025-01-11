@@ -21,10 +21,6 @@ const LoginNav = () => {
           <Link style={styles.sign} href="/sign-up">
             <Text style={styles.buttonText}>Sign Up</Text>
           </Link>
-
-          <Link style={styles.sign} href="./(app)">
-            <Text style={styles.buttonText}>index</Text>
-          </Link>
         </View>
       </SafeAreaView>
     </GestureHandlerRootView>
@@ -64,6 +60,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     padding: 24,
+    backgroundColor: "#c2d8d1",
   },
   main: {
     flex: 1,
@@ -73,7 +70,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 32,
-    fontWeight: "bold",
+    fontFamily: 'Blimps',
     textAlign: "center",
   },
   sign: {

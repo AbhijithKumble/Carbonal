@@ -2,9 +2,9 @@ import React from "react";
 import { Alert, Button, View, Text, TextInput } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import axios from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import ip from '../utils/ip.js'
 import { useRouter } from "expo-router";
-import ip from '../utils/ip.js';
 
 const SignUp = () => {
   const {

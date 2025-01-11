@@ -6,12 +6,12 @@ const Leaderboard = () => {
   const [leaderboardData, setLeaderboardData] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch leaderboard data from the server
+  
   useEffect(() => {
     const fetchLeaderboardData = async () => {
       try {
         console.log(ip);
-        const response = await axios.get(ip+"/leaderboard"); // Update with your server URL
+        const response = await axios.get(ip+"/leaderboard");
         setLeaderboardData(response.data);
       } catch (error) {
         console.error("Error fetching leaderboard data:", error);

@@ -1,7 +1,8 @@
 import { mongoose } from "mongoose";
 import  dotenv  from 'dotenv';
-
+import quotes from '../quotes.json'
 dotenv.config();
+const Quote=require('../models/Quotes.model');
 
 const getUri = () => {
     let mongoUri = "";
