@@ -10,7 +10,7 @@ const mongoUri = process.env.MONGODB_URI;
 
 mongoose.connect(mongoUri)
   .then(async () => {
-    console.log('Connected to MongoDB!');
+    // console.log('Connected to MongoDB!');
     
     // Example quotes
     const quotes =[
@@ -39,7 +39,7 @@ mongoose.connect(mongoUri)
 
     // Insert the quotes into the Quotes collection
     await Quote.insertMany(quotes);
-    console.log('Quotes populated!');
+    // console.log('Quotes populated!');
     process.exit(0); // Exit the process after population
   })
   .catch(err => {

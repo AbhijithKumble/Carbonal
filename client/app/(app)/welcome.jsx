@@ -17,9 +17,9 @@ const Welcome = () => {
         const response = await axios.get(ip+'/quote');
         const quote = typeof response.data === 'string' ? response.data : response.data.text; // Handle both object and string responses
         setMyQuote(quote || "No quote available"); // Fallback if quote is empty
-        console.log(myQuote);
+        // console.log(myQuote);
       } catch (error) {
-        console.error(error);
+        // console.error(error);
         setMyQuote("Error fetching quote");
       }
     };

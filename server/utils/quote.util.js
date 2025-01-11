@@ -27,11 +27,11 @@ const populateQuotes = async () => {
   try {
     const count = await Quote.countDocuments();
     if (count === 0) {
-      console.log('Populating database with quotes...');
+      // console.log('Populating database with quotes...');
       await Quote.insertMany(quotes);
-      console.log('Database population complete.');
+      // console.log('Database population complete.');
     } else {
-      console.log('Database already populated.');
+      // console.log('Database already populated.');
     }
   } catch (error) {
     console.error('Error populating quotes:', error);

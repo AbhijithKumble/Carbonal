@@ -23,7 +23,7 @@ app.use(cors());
 
 mongoose.connect(process.env.MONGODB_URI)
   .then(async () => {
-    console.log('Connected to MongoDB!')
+    // console.log('Connected to MongoDB!')
     await populateQuotes(); // Populate quotes during startup
     return;
   })
@@ -47,5 +47,5 @@ app.get('/', (req, res) => {
 });
 
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server running on ${ip}`);
+  // console.log(`Server running on ${ip}`);
 });

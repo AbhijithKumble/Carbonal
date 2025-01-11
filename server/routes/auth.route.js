@@ -9,7 +9,7 @@ dotenv.config();
 const router = express.Router();
 // Sign-up Route
 router.post('/signup', async (req, res) => {
-  console.log(req.body)
+  // console.log(req.body)
   const { name, email, password } = req.body;
 
 
@@ -42,7 +42,7 @@ router.post('/signup', async (req, res) => {
 
     res.status(201).json({ userId: savedUser._id, token });
   } catch (error) {
-    console.log(error)
+    // console.log(error)
     res.status(500).json({ message: 'Error signing up.', error });
   }
 });
