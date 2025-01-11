@@ -1,9 +1,9 @@
 import React from "react";
-import { Alert, Button, View, Text, TextInput } from "react-native";
+import { Alert, View, Text, TextInput, StyleSheet, Pressable } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import axios from "axios";
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import ip from '../utils/ip.js'
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import ip from "../utils/ip.js";
 import { useRouter } from "expo-router";
 
 const SignUp = () => {
@@ -36,7 +36,7 @@ const SignUp = () => {
         name: data.name,
         email: data.email,
         password: data.password,
-        dateJoined: new Date().toISOString(), // Automatically include the current date
+        dateJoined: new Date().toISOString(),
       });
 
       if (response.data.token) {
@@ -60,7 +60,9 @@ const SignUp = () => {
   };
 
   return (
-    <View style={{ padding: 20 }}>
+    <View style={styles.container}>
+      <Text style={styles.header}>Sign Up</Text>
+
       <Controller
         control={control}
         name="name"
@@ -70,11 +72,11 @@ const SignUp = () => {
             placeholder="Name"
             value={value}
             onChangeText={onChange}
-            style={{ marginBottom: 10, borderWidth: 1, padding: 10 }}
+            style={[styles.input, errors.name && styles.errorInput]}
           />
         )}
       />
-      {errors.name && <Text style={{ color: "red" }}>{errors.name.message}</Text>}
+      {errors.name && <Text style={styles.errorText}>{errors.name.message}</Text>}
 
       <Controller
         control={control}
@@ -92,11 +94,11 @@ const SignUp = () => {
             value={value}
             onChangeText={onChange}
             keyboardType="email-address"
-            style={{ marginBottom: 10, borderWidth: 1, padding: 10 }}
+            style={[styles.input, errors.email && styles.errorInput]}
           />
         )}
       />
-      {errors.email && <Text style={{ color: "red" }}>{errors.email.message}</Text>}
+      {errors.email && <Text style={styles.errorText}>{errors.email.message}</Text>}
 
       <Controller
         control={control}
@@ -108,12 +110,12 @@ const SignUp = () => {
             value={value}
             onChangeText={onChange}
             secureTextEntry
-            style={{ marginBottom: 10, borderWidth: 1, padding: 10 }}
+            style={[styles.input, errors.password && styles.errorInput]}
           />
         )}
       />
       {errors.password && (
-        <Text style={{ color: "red" }}>{errors.password.message}</Text>
+        <Text style={styles.errorText}>{errors.password.message}</Text>
       )}
 
       <Controller
@@ -129,18 +131,71 @@ const SignUp = () => {
             value={value}
             onChangeText={onChange}
             secureTextEntry
-            style={{ marginBottom: 10, borderWidth: 1, padding: 10 }}
+            style={[styles.input, errors.confirmPassword && styles.errorInput]}
           />
         )}
       />
       {errors.confirmPassword && (
-        <Text style={{ color: "red" }}>{errors.confirmPassword.message}</Text>
+        <Text style={styles.errorText}>{errors.confirmPassword.message}</Text>
       )}
 
-      <Button title="Sign Up" onPress={handleSubmit(onSubmit)} />
+      <Pressable style={styles.googleText} onPress={handleSubmit(onSubmit)}>
+        <Text style={styles.text}>Sign Up</Text>
+      </Pressable>
     </View>
   );
 };
 
-export default SignUp;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    padding: 20,
+    backgroundColor: "#c4dad2",
+  },
+  text: {
+    color: "white",
+    fontFamily: "Blimps",
+  },
+  header: {
+    fontSize: 24,
+    fontFamily: "Blimps",
+    marginBottom: 20,
+    textAlign: "center",
+  },
+  input: {
+    height: 50,
+    borderColor: "#ccc",
+    borderWidth: 1,
+    borderRadius: 20,
+    paddingHorizontal: 10,
+    marginBottom: 10,
+    marginTop: 20,
+    textAlign: "center",
+    backgroundColor: "#77bba2",
+  },
+  errorInput: {
+    borderColor: "red",
+  },
+  errorText: {
+    color: "red",
+    marginBottom: 10,
+  },
+  googleText: {
+    marginTop: 20,
+    justifyContent: "center",
+    borderColor: "#ccc",
+    borderWidth: 1,
+    borderRadius: 20,
+    height: 50,
+    alignItems: "center",
+    textAlign: "center",
+    paddingVertical: 12,
+    backgroundColor: "#3c7962",
+    color: "white",
+    fontFamily: "Blimps",
+    fontSize: 16,
+  },
+});
 
+export default SignUp;
