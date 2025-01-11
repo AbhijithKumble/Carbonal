@@ -34,10 +34,10 @@ const PersonalVehicles = ({
       console.error("Cannot update: User ID is not available.");
       return;
     }
-
+    const currentMonth = currentDate.getMonth() + 5;
     try {
       console.log(Id);
-      const response = await axios.put(ip+`/usage/${Id}`, {
+      const response = await axios.put(ip+`/usage/${Id}/${currentMonth}`, {
        petrolLitres:parseFloat(petrolLitres),
        dieselLitres:parseFloat(dieselLitres),
       });

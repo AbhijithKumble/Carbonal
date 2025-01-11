@@ -6,7 +6,7 @@ import ip from "../../utils/ip";
 
 const TotalFootPrint = ({ totalFootprint }) => {
   const [email, setEmail] = useState("");
-
+  const [Id, setId] = useState("");
   // Fetch email from AsyncStorage
   useEffect(() => {
     const fetchEmail = async () => {
@@ -21,7 +21,21 @@ const TotalFootPrint = ({ totalFootprint }) => {
         console.error("Error retrieving email from AsyncStorage:", err);
       }
     };
+    const fetchId = async () => {
+      try {
+        const storedId = await AsyncStorage.getItem("userId");
+        if (storedId) {
+          setId(storedId);
+
+        } else {
+          console.error("Id is not available.");
+        }
+      } catch (err) {
+        console.error("Error retrieving Id from AsyncStorage:", err);
+      }
+    };
     fetchEmail();
+    fetchId();
   }, []);
 
   const update = () => {
@@ -34,19 +48,37 @@ const TotalFootPrint = ({ totalFootprint }) => {
       email: email,
       footprint: totalFootprint,
     };
-
+    console.log("Email:", email);
     axios
       .post(ip+"/footprint", formdata)
       .then((res) => console.log(res.data))
       .catch((err) => console.error(err));
   };
+  const updatefoot= async ()=>{
+    if (!Id) {
+      console.error("Cannot update: User ID is not available.");
+      return;
+    }
+    try {
+      console.log(totalFootprint);
+      const response=await axios.put(ip+`/usage/${Id}`,{
+        footprint:totalFootprint,
+      });
+      console.log(response.data);
+    } catch (error) {
+      console.log("h"+error);
+    }
+  }
 
   return (
     <View style={styles.totalFootprintContainer}>
       <Text style={styles.totalFootprintText}>
         Total Carbon Footprint: {totalFootprint.toFixed(2)} kg CO2
       </Text>
-      <Button title="Save" onPress={update} style={styles.googleText} />
+      <Button title="Save" onPress={()=>{
+        update();
+        updatefoot();
+      }} style={styles.googleText} />
     </View>
   );
 };

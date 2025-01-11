@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import ip from '../../utils/ip';
 
 const Food = ({
   meatFishKg, setMeatFishKg,
@@ -44,7 +45,7 @@ const Food = ({
     }
   
     try {
-      const response = await axios.put(`http://192.168.0.101:3000/usage/${Id}`, {
+      const response = await axios.put(ip+`/usage/${Id}`, {
         meatFishKg: meatValue,
         
       });

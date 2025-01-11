@@ -88,15 +88,15 @@ const Tips = () => {
       Great job keeping diesel usage low! Keep up the eco-friendly habits by minimizing unnecessary trips and exploring alternative energy sources.
     </Text>
   )}
-  {Usage.meatFishKg > 20 ? (
+  {Usage.meatFishKg >20 ? (
     <Text style={styles.ptext}>
       Your meat consumption is quite high. Consider incorporating more plant-based meals into your diet. Not only is this healthier, but it also significantly reduces your carbon footprint. Start with meat-free Mondays!
     </Text>
-  ) : Usage.meatFishKg > 10 ? (
+  ) : 20>Usage.meatFishKg > 10 ? (
     <Text style={styles.ptext}>
       Your meat consumption is above average. Try balancing your diet with more legumes, grains, and vegetables. Explore recipes that use meat as a flavor enhancer rather than the main ingredient.
     </Text>
-  ) : Usage.meatFishKg > 5 ? (
+  ) : 10>Usage.meatFishKg > 5 ? (
     <Text style={styles.ptext}>
       Your meat consumption is moderate. Gradually reduce portion sizes or substitute some meals with plant-based proteins like tofu, lentils, or chickpeas.
     </Text>

@@ -207,7 +207,7 @@ app.post('/update-user',async(req,res)=>{
 })
 app.get('/leaderboard', async (req, res) => {
   try {
-    const leaderboardData = await User.find().sort({ footprint:-1 }); // Ensure 'Leaderboard' is correctly defined
+    const leaderboardData = await User.find().sort({ footprint:-1 }); 
     res.json(leaderboardData);
   } catch (error) {
     console.error("Error fetching leaderboard data:", error);
@@ -222,78 +222,124 @@ app.get('/protected', authenticateToken, (req, res) => {
 
 app.put('/usage/:userId', async (req, res) => {
   try {
-    const { userId } = req.params; // Extract userId from the URL
-    const { electricityUnits, fossilFuelCost,meatFishKg,petrolLitres,dieselLitres,phones,laptopsDesktops,otherGadgets } = req.body; // Get data from the request body
+    const { userId } = req.params;
+    const { 
+      electricityUnits, fossilFuelCost, meatFishKg, 
+      petrolLitres, dieselLitres, phones, laptopsDesktops, 
+      otherGadgets, footprint 
+    } = req.body;
 
-    // if (!electricityUnits && !fossilFuelCost&&!meatFishKg&&!petrolLitres&&!dieselLitres) {
-    //   return res.status(400).json({ error: 'At least one field must be provided for update.' });
-    // }
+    // If footprint is not provided, it will default to 0 as per the schema
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth() + 1;
 
-    // Prepare the update object dynamically
-    const updateData = {};
-    if (electricityUnits) updateData.electricityUnits = electricityUnits;
-    if (fossilFuelCost) updateData.fossilFuelCost = fossilFuelCost;
-    if(meatFishKg) updateData.meatFishKg = meatFishKg;
-    if(petrolLitres) updateData.petrolLitres=petrolLitres;
-    if(dieselLitres) updateData.dieselLitres=dieselLitres;
-    if(phones) updateData.phones=phones;
-    if(laptopsDesktops) updateData.laptopsDesktops=laptopsDesktops;
-    if(otherGadgets) updateData.otherGadgets=otherGadgets;
+    const updateData = {
+      electricityUnits,
+      fossilFuelCost,
+      meatFishKg,
+      petrolLitres,
+      dieselLitres,
+      phones,
+      laptopsDesktops,
+      otherGadgets,
+      footprint, 
+    };
+
+    const existingUsage = await Usages.findOne({
+      userId,
+      currentYear,
+      currentMonth
+    });
+
+    if (existingUsage) {
+      // Update existing document
+      const updatedUsage = await Usages.findOneAndUpdate(
+        { userId, currentYear, currentMonth },
+        { $set: updateData },
+        { new: true ,upsert: true }
+      );
+      return res.status(200).json({ message: 'Usage data updated successfully', data: updatedUsage });
+    } else {
+      // Insert new document
     
-    // Update the Usages document in the database
-    const updatedUsage = await Usages.findOneAndUpdate(
-      { userId }, // Filter by userId
-      { $set: updateData }, // Update fields
-      { new: true, upsert: true } // Return updated document, create new if not found
-    );
-
-    if (!updatedUsage) {
-      return res.status(404).json({ error: 'No usage record found for the given userId.' });
+      const newUsage = new Usages({
+        userId:userId,
+        currentYear:currentYear,
+        currentMonth:currentMonth,
+        electricityUnits,
+        fossilFuelCost,
+        meatFishKg,
+        petrolLitres,
+        dieselLitres,
+        phones,
+        laptopsDesktops,
+        otherGadgets,
+        footprint,
+        
+      }  
+      
+      );
+      console.log(newUsage);
+      const savedUsage = await newUsage.save(); // Save the new document
+      return res.status(200).json({ message: 'Usage data inserted successfully', data: savedUsage });
     }
-
-    res.status(200).json({ message: 'Usage data updated successfully', data: updatedUsage });
   } catch (error) {
     console.error('Error updating usage data:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+
+
+
+
+
+
 app.get('/usage/:userId', async (req, res) => {
   const { userId } = req.params;
 
   try {
-    const usage = await Usages.findOne({ userId });
-
-    if (!usage) {
+    const usageData = await Usages.find({ userId: userId }).sort({ currentYear: -1, currentMonth: -1 });
+    res.json(usageData);
+    if (!usageData) {
       return res.status(404).json({ error: 'No usage data found for the given userId.' });
     }
 
-    res.status(200).json(usage);
+    res.status(200).json(usageData);
   } catch (error) {
     console.error('Error fetching usage data:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+let cachedQuote = null;
+let lastFetchedDay = null;
+
 app.get('/quote', async (req, res) => {
+  const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+
+  if (cachedQuote && lastFetchedDay === today) {
+    return res.json({ text: cachedQuote });
+  }
+
   try {
     const count = await Quote.countDocuments();
-    if (count === 0) {
-      return res.status(404).json({ message: 'No quotes available.' });
-    }
-
-    // Generate a daily index based on the current date
-    const today = new Date();
-    const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
-    const dailyIndex = dayOfYear % count; // Wrap around using modulo
-
-    // Fetch the quote for the daily index
+    const dayOfYear = Math.floor(
+      (new Date() - new Date(new Date().getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24)
+    );
+    const dailyIndex = dayOfYear % count;
     const dailyQuote = await Quote.findOne().skip(dailyIndex);
 
-    res.json({ text: dailyQuote.quote });
+    cachedQuote = dailyQuote.quote;
+    lastFetchedDay = today;
+
+    res.json({ text: cachedQuote });
   } catch (error) {
     console.error('Error fetching daily quote:', error);
     res.status(500).json({ message: 'Error fetching quote.' });
   }
 });
+
 
 
 app.listen(PORT, () => {
