@@ -1,6 +1,5 @@
 import { Link } from "expo-router";
-import { Button, StyleSheet, Text, View } from "react-native";
-import { router } from "expo-router";
+import { StyleSheet, Text, View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage"; // Import AsyncStorage
 import { useEffect, useState } from "react";
 import Index from "./(app)";

@@ -17,7 +17,7 @@ const Tips = () => {
         if (storedId) {
           setId(storedId);
           console.log("Fetched userId:", storedId);
-          const response = await axios.get(ip+`/usage/${storedId}`);
+          const response = await axios.get(ip + `/usage/${storedId}`);
           setUsage(response.data);
         } else {
           console.error("Id is not available.");
@@ -32,7 +32,7 @@ const Tips = () => {
     fetchData();
   }, []);
 
- 
+
 
   if (!Usage) {
     return (
@@ -46,94 +46,90 @@ const Tips = () => {
 
     <View style={styles.container}>
       <ImageBackground
-      source={require("../../../assets/images/tipsback.jpeg")}
-      style={styles.background}
+        source={require("../../../assets/images/tipsback.jpeg")}
+        style={styles.background}
       >
-
-    
-
-      <Text style={styles.tips}>Tips</Text>
-      <Text style={styles.pers}>Personal Tip</Text>
-      <View style={styles.personaltip}>
-  {Usage.petrolLitres > 200 ? (
-    <Text style={styles.ptext}>
-      Petrol usage is extremely high. Consider using public transport or carpooling regularly. Switching to a more fuel-efficient vehicle can also make a big difference.
-    </Text>
-  ) : Usage.petrolLitres > 100 ? (
-    <Text style={styles.ptext}>
-      Petrol usage is above average. Try using a bicycle or walking for short distances, and combine errands to reduce trips.
-    </Text>
-  ) : Usage.petrolLitres > 50 ? (
-    <Text style={styles.ptext}>
-      Petrol usage is moderate. Opt for public transport a few times a week or explore carpooling options with colleagues or friends.
-    </Text>
-  ) : (
-    <Text style={styles.ptext}>
-      Good job on keeping petrol usage low! Continue to explore sustainable travel options.
-    </Text>
-  )}
-    {Usage.dieselLitres > 200 ? (
-    <Text style={styles.ptext}>
-      Diesel usage is very high. Consider switching to electric or hybrid vehicles for long-term savings and environmental benefits. Optimize your routes to minimize fuel consumption.
-    </Text>
-  ) : Usage.dieselLitres > 100 ? (
-    <Text style={styles.ptext}>
-      Diesel usage is above average. Schedule regular vehicle maintenance to improve fuel efficiency. Reduce idling and explore alternative transport options when possible.
-    </Text>
-  ) : Usage.dieselLitres > 50 ? (
-    <Text style={styles.ptext}>
-      Diesel usage is moderate. Use fuel-efficient driving techniques such as maintaining a steady speed and avoiding rapid acceleration.
-    </Text>
-  ) : (
-    <Text style={styles.ptext}>
-      Great job keeping diesel usage low! Keep up the eco-friendly habits by minimizing unnecessary trips and exploring alternative energy sources.
-    </Text>
-  )}
-  {Usage.meatFishKg > 20 ? (
-    <Text style={styles.ptext}>
-      Your meat consumption is quite high. Consider incorporating more plant-based meals into your diet. Not only is this healthier, but it also significantly reduces your carbon footprint. Start with meat-free Mondays!
-    </Text>
-  ) : Usage.meatFishKg > 10 ? (
-    <Text style={styles.ptext}>
-      Your meat consumption is above average. Try balancing your diet with more legumes, grains, and vegetables. Explore recipes that use meat as a flavor enhancer rather than the main ingredient.
-    </Text>
-  ) : Usage.meatFishKg > 5 ? (
-    <Text style={styles.ptext}>
-      Your meat consumption is moderate. Gradually reduce portion sizes or substitute some meals with plant-based proteins like tofu, lentils, or chickpeas.
-    </Text>
-  ) : (
-    <Text style={styles.ptext}>
-      Great job keeping meat consumption low! A plant-forward diet is excellent for your health and the environment. Keep exploring sustainable food choices.
-    </Text>
-  )}
-   {Usage.laptopsDesktops + Usage.phones + Usage.otherGadgets > 10 ? (
-    <Text style={styles.ptext}>
-      Owning multiple gadgets increases e-waste. Donate unused devices or sell them to recycling programs. Aim for shared usage and reduce gadget purchases.
-    </Text>
-  ) : Usage.laptopsDesktops + Usage.phones + Usage.otherGadgets > 5 ? (
-    <Text style={styles.ptext}>
-      Reduce your electronics footprint by considering multi-functional devices and repairing rather than replacing old gadgets.
-    </Text>
-  ) : (
-    <Text style={styles.ptext}>
-      Your gadget usage is sustainable. Continue recycling old devices and choosing energy-efficient options for future purchases.
-    </Text>
-  )}
-</View>
-</ImageBackground>
+        <Text style={styles.tips}>Tips</Text>
+        <Text style={styles.pers}>Personal Tip</Text>
+        <View style={styles.personaltip}>
+          {Usage.petrolLitres > 200 ? (
+            <Text style={styles.ptext}>
+              Petrol usage is extremely high. Consider using public transport or carpooling regularly. Switching to a more fuel-efficient vehicle can also make a big difference.
+            </Text>
+          ) : Usage.petrolLitres > 100 ? (
+            <Text style={styles.ptext}>
+              Petrol usage is above average. Try using a bicycle or walking for short distances, and combine errands to reduce trips.
+            </Text>
+          ) : Usage.petrolLitres > 50 ? (
+            <Text style={styles.ptext}>
+              Petrol usage is moderate. Opt for public transport a few times a week or explore carpooling options with colleagues or friends.
+            </Text>
+          ) : (
+            <Text style={styles.ptext}>
+              Good job on keeping petrol usage low! Continue to explore sustainable travel options.
+            </Text>
+          )}
+          {Usage.dieselLitres > 200 ? (
+            <Text style={styles.ptext}>
+              Diesel usage is very high. Consider switching to electric or hybrid vehicles for long-term savings and environmental benefits. Optimize your routes to minimize fuel consumption.
+            </Text>
+          ) : Usage.dieselLitres > 100 ? (
+            <Text style={styles.ptext}>
+              Diesel usage is above average. Schedule regular vehicle maintenance to improve fuel efficiency. Reduce idling and explore alternative transport options when possible.
+            </Text>
+          ) : Usage.dieselLitres > 50 ? (
+            <Text style={styles.ptext}>
+              Diesel usage is moderate. Use fuel-efficient driving techniques such as maintaining a steady speed and avoiding rapid acceleration.
+            </Text>
+          ) : (
+            <Text style={styles.ptext}>
+              Great job keeping diesel usage low! Keep up the eco-friendly habits by minimizing unnecessary trips and exploring alternative energy sources.
+            </Text>
+          )}
+          {Usage.meatFishKg > 20 ? (
+            <Text style={styles.ptext}>
+              Your meat consumption is quite high. Consider incorporating more plant-based meals into your diet. Not only is this healthier, but it also significantly reduces your carbon footprint. Start with meat-free Mondays!
+            </Text>
+          ) : Usage.meatFishKg > 10 ? (
+            <Text style={styles.ptext}>
+              Your meat consumption is above average. Try balancing your diet with more legumes, grains, and vegetables. Explore recipes that use meat as a flavor enhancer rather than the main ingredient.
+            </Text>
+          ) : Usage.meatFishKg > 5 ? (
+            <Text style={styles.ptext}>
+              Your meat consumption is moderate. Gradually reduce portion sizes or substitute some meals with plant-based proteins like tofu, lentils, or chickpeas.
+            </Text>
+          ) : (
+            <Text style={styles.ptext}>
+              Great job keeping meat consumption low! A plant-forward diet is excellent for your health and the environment. Keep exploring sustainable food choices.
+            </Text>
+          )}
+          {Usage.laptopsDesktops + Usage.phones + Usage.otherGadgets > 10 ? (
+            <Text style={styles.ptext}>
+              Owning multiple gadgets increases e-waste. Donate unused devices or sell them to recycling programs. Aim for shared usage and reduce gadget purchases.
+            </Text>
+          ) : Usage.laptopsDesktops + Usage.phones + Usage.otherGadgets > 5 ? (
+            <Text style={styles.ptext}>
+              Reduce your electronics footprint by considering multi-functional devices and repairing rather than replacing old gadgets.
+            </Text>
+          ) : (
+            <Text style={styles.ptext}>
+              Your gadget usage is sustainable. Continue recycling old devices and choosing energy-efficient options for future purchases.
+            </Text>
+          )}
+        </View>
+      </ImageBackground>
     </View>
   );
 };
 
-export default Tips;
 
 const styles = StyleSheet.create({
   background: {
-            // Make the background fill the screen
+    // Make the background fill the screen
     resizeMode: "cover", // Scale the image to cover the area
-    flex:1,
-    width:'100%',
-    height:'100%',
+    flex: 1,
+    width: '100%',
+    height: '100%',
   },
   ptext: {
     fontFamily: "Blimps",
@@ -142,7 +138,7 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   personaltip: {
-    
+
     padding: 20,
     borderRadius: 14,
     shadowColor: "#000",

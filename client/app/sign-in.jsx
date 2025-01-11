@@ -1,11 +1,10 @@
-
 import React, { useEffect } from "react";
 import { Text, View, TextInput, Button, StyleSheet, Alert, Pressable } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 // import {
 
 //   statusCodes,
-  
+
 //   GoogleSignin,
 // } from '@react-native-google-signin/google-signin';
 import ip from '../utils/ip.js'
@@ -14,9 +13,9 @@ import { router } from "expo-router";
 import { FontAwesome5 } from '@expo/vector-icons';
 import axios from 'axios';
 
-const androidClient="846065075010-1gf6p9hlhuk0gsdqd94rt0q2p1ilq311.apps.googleusercontent.com";
-const webid="846065075010-d2gagffur44lfgja4jbrkn0php103d27.apps.googleusercontent.com";
-const iosid="846065075010-its3uresv6ueijejsnhjvtetpoqo49s3.apps.googleusercontent.com";
+const androidClient = "846065075010-1gf6p9hlhuk0gsdqd94rt0q2p1ilq311.apps.googleusercontent.com";
+const webid = "846065075010-d2gagffur44lfgja4jbrkn0php103d27.apps.googleusercontent.com";
+const iosid = "846065075010-its3uresv6ueijejsnhjvtetpoqo49s3.apps.googleusercontent.com";
 
 // GoogleSignin.configure({
 //   webClientId: webid, 
@@ -24,7 +23,7 @@ const iosid="846065075010-its3uresv6ueijejsnhjvtetpoqo49s3.apps.googleuserconten
 //   scopes: ['https://www.googleapis.com/auth/drive.readonly'],
 //   forceCodeForRefreshToken: false,
 //   iosClientId: iosid,
-  
+
 // });
 
 // const googlesignin = async () => {
@@ -48,10 +47,8 @@ const iosid="846065075010-its3uresv6ueijejsnhjvtetpoqo49s3.apps.googleuserconten
 
 
 const SignIn = () => {
- 
 
   console.log(ip);
-
 
   const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
@@ -62,36 +59,36 @@ const SignIn = () => {
 
   const onSubmit = async (data) => {
     try {
-      
-      const response = await axios.post(ip+"/signin", data);
-  
-      console.log("Server Response:", response.data);
-  
+
+      const response = await axios.post(`${ip}/auth/signin`, data);
+
+      console.log("Server Response:", response);
+
       if (response.data.token) {
-        
-        AsyncStorage.setItem('token',response.data.data);
+
+        await AsyncStorage.setItem('token', response.data.token);
         await AsyncStorage.setItem("isLoggedIn", "true");
         await AsyncStorage.setItem("email", data.email);
-        await AsyncStorage.setItem('userId', response.data.userId); 
-        router.push("/(app)"); 
+        await AsyncStorage.setItem('userId', response.data.userId);
+        router.push("/(app)");
 
-      } else if(response.data.data==="User already present"){
-        
-        await AsyncStorage.setItem('token',response.data.data);
+      } else if (response.data.data === "User already present") {
+
+        await AsyncStorage.setItem('token', response.data.token);
         await AsyncStorage.setItem("isLoggedIn", "true");
         await AsyncStorage.setItem("email", data.email);
 
-        router.push("/(app)"); 
-       
+        router.push("/(app)");
+
       }
       else {
         Alert.alert("Error", "Invalid credentials.");
       }
     } catch (error) {
 
-      Alert.alert("Sign-up error:",  error.message);
+      Alert.alert("Sign-up error:", error.message);
       if (error.response?.status === 401) {
-        
+
         Alert.alert("Error", "Unauthorized: Invalid credentials or access.");
       } else {
         console.log(error);
@@ -100,7 +97,6 @@ const SignIn = () => {
     }
   };
 
-  
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Sign In</Text>
@@ -151,13 +147,13 @@ const SignIn = () => {
       {errors.password && <Text style={styles.errorText}>{errors.password.message}</Text>}
 
       <View>
-      <Pressable style={styles.googleText}  onPress={handleSubmit(onSubmit)} >
-        <Text style={styles.text} >Sign In</Text>
-      </Pressable>
+        <Pressable style={styles.googleText} onPress={handleSubmit(onSubmit)} >
+          <Text style={styles.text} >Sign In</Text>
+        </Pressable>
       </View>
-      
+
       <Pressable style={styles.googleText} title="google" >
-      <Text style={styles.text} >Log In With Google</Text>
+        <Text style={styles.text} >Log In With Google</Text>
       </Pressable>
     </View>
   );
@@ -170,13 +166,13 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: "#c4dad2",
   },
-  text:{
-    color:"white",
-    fontFamily: "Blimps", 
+  text: {
+    color: "white",
+    fontFamily: "Blimps",
   },
   header: {
     fontSize: 24,
-    fontFamily:"Blimps",
+    fontFamily: "Blimps",
     marginBottom: 20,
     textAlign: "center",
   },
@@ -205,16 +201,16 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     borderWidth: 1,
     borderRadius: 20,
-    height:50,
-    
-    alignItems:"center",
-    textAlign:"center",
-    alignContent:"center",
-    paddingVertical:12,
-    backgroundColor:"#3c7962",
-    color:"white",
-    fontFamily: "Blimps", 
-    fontSize:16,
+    height: 50,
+
+    alignItems: "center",
+    textAlign: "center",
+    alignContent: "center",
+    paddingVertical: 12,
+    backgroundColor: "#3c7962",
+    color: "white",
+    fontFamily: "Blimps",
+    fontSize: 16,
   },
 });
 

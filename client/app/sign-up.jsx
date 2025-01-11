@@ -1,11 +1,19 @@
 import React from "react";
-import { Text, View, TextInput, Button, StyleSheet, Alert } from "react-native";
+import { Alert, Button, View, Text, TextInput } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import axios from "axios";
-import { router } from "expo-router"; 
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useRouter } from "expo-router";
+import ip from '../utils/ip.js';
+
 const SignUp = () => {
-  const { control, handleSubmit, watch, formState: { errors }, reset } = useForm({
+  const {
+    control,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    reset,
+  } = useForm({
     defaultValues: {
       name: "",
       email: "",
@@ -14,133 +22,119 @@ const SignUp = () => {
     },
   });
 
+  const router = useRouter();
+  const password = watch("password");
+
   const onSubmit = async (data) => {
-    console.log("Sign-up data:", data);
+    if (data.password !== data.confirmPassword) {
+      Alert.alert("Error", "Passwords do not match.");
+      return;
+    }
 
-    if (data.email && data.password && data.name) {
-      try {
-        const response = await axios.post("http://192.168.0.101:3000/signup", {
-          name: data.name,
-          email: data.email,
-          password: data.password,
-          dateJoined: new Date().toISOString(), // Automatically include current date
-        });
+    try {
+      const response = await axios.post(`${ip}/auth/signup`, {
+        name: data.name,
+        email: data.email,
+        password: data.password,
+        dateJoined: new Date().toISOString(), // Automatically include the current date
+      });
 
-        if (response.data.token) {
+      if (response.data.token) {
+        const { token, userId } = response.data;
 
-      const { token, userId } = response.data; // Extract userId from the response
+        Alert.alert("Success", "Sign-up successful!");
+        reset(); // Clear the form
+        await AsyncStorage.setItem("token", token);
+        await AsyncStorage.setItem("isLoggedIn", "true");
+        await AsyncStorage.setItem("email", data.email);
+        await AsyncStorage.setItem("userId", userId);
 
-          Alert.alert("Success", "Sign-up successful!");
-          reset(); // Clear the form
-          AsyncStorage.setItem('token',token);
-          await AsyncStorage.setItem("isLoggedIn", "true");
-          await AsyncStorage.setItem("email", data.email);
-          await AsyncStorage.setItem('userId', userId);
-        router.push("/(app)"); 
-        } else {
-          Alert.alert("Error", "Sign-up failed. Please try again.");
-        }
-      } catch (error) {
-        console.error("Sign-up error:", error);
-        Alert.alert("Error", `Network Error: ${error.message}`);
+        router.push("/(app)");
+      } else {
+        Alert.alert("Error", "Sign-up failed. Please try again.");
       }
-    } else {
-      Alert.alert("Error", "Please fill in all the required fields.");
+    } catch (error) {
+      console.error("Sign-up error:", error);
+      Alert.alert("Error", `Network Error: ${error.message}`);
     }
   };
 
-  const password = watch("password");
-
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Sign Up</Text>
-
-      {/* Name Field */}
+    <View style={{ padding: 20 }}>
       <Controller
         control={control}
         name="name"
-        rules={{ required: "Name is required." }}
-        render={({ field: { onChange, onBlur, value } }) => (
+        rules={{ required: "Name is required" }}
+        render={({ field: { onChange, value } }) => (
           <TextInput
-            style={[styles.input, errors.name && styles.errorInput]}
             placeholder="Name"
-            onBlur={onBlur}
-            onChangeText={onChange}
             value={value}
+            onChangeText={onChange}
+            style={{ marginBottom: 10, borderWidth: 1, padding: 10 }}
           />
         )}
       />
-      {errors.name && <Text style={styles.errorText}>{errors.name.message}</Text>}
+      {errors.name && <Text style={{ color: "red" }}>{errors.name.message}</Text>}
 
-      {/* Email Field */}
       <Controller
         control={control}
         name="email"
         rules={{
-          required: "Email is required.",
+          required: "Email is required",
           pattern: {
-            value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-            message: "Invalid email address.",
+            value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+            message: "Enter a valid email",
           },
         }}
-        render={({ field: { onChange, onBlur, value } }) => (
+        render={({ field: { onChange, value } }) => (
           <TextInput
-            style={[styles.input, errors.email && styles.errorInput]}
             placeholder="Email"
-            onBlur={onBlur}
-            onChangeText={onChange}
             value={value}
+            onChangeText={onChange}
+            keyboardType="email-address"
+            style={{ marginBottom: 10, borderWidth: 1, padding: 10 }}
           />
         )}
       />
-      {errors.email && <Text style={styles.errorText}>{errors.email.message}</Text>}
+      {errors.email && <Text style={{ color: "red" }}>{errors.email.message}</Text>}
 
-      {/* Password Field */}
       <Controller
         control={control}
         name="password"
-        rules={{
-          required: "Password is required.",
-          minLength: {
-            value: 6,
-            message: "Password must be at least 6 characters long.",
-          },
-        }}
-        render={({ field: { onChange, onBlur, value } }) => (
+        rules={{ required: "Password is required", minLength: 6 }}
+        render={({ field: { onChange, value } }) => (
           <TextInput
-            style={[styles.input, errors.password && styles.errorInput]}
             placeholder="Password"
-            secureTextEntry
-            onBlur={onBlur}
-            onChangeText={onChange}
             value={value}
+            onChangeText={onChange}
+            secureTextEntry
+            style={{ marginBottom: 10, borderWidth: 1, padding: 10 }}
           />
         )}
       />
-      {errors.password && <Text style={styles.errorText}>{errors.password.message}</Text>}
+      {errors.password && (
+        <Text style={{ color: "red" }}>{errors.password.message}</Text>
+      )}
 
-      {/* Confirm Password Field */}
       <Controller
         control={control}
         name="confirmPassword"
         rules={{
-          required: "Please confirm your password.",
-          validate: (value) =>
-            value === password || "Passwords do not match.",
+          required: "Confirm Password is required",
+          validate: (value) => value === password || "Passwords must match",
         }}
-        render={({ field: { onChange, onBlur, value } }) => (
+        render={({ field: { onChange, value } }) => (
           <TextInput
-            style={[styles.input, errors.confirmPassword && styles.errorInput]}
             placeholder="Confirm Password"
-            secureTextEntry
-            onBlur={onBlur}
-            onChangeText={onChange}
             value={value}
+            onChangeText={onChange}
+            secureTextEntry
+            style={{ marginBottom: 10, borderWidth: 1, padding: 10 }}
           />
         )}
       />
       {errors.confirmPassword && (
-        <Text style={styles.errorText}>{errors.confirmPassword.message}</Text>
+        <Text style={{ color: "red" }}>{errors.confirmPassword.message}</Text>
       )}
 
       <Button title="Sign Up" onPress={handleSubmit(onSubmit)} />
@@ -148,34 +142,5 @@ const SignUp = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    padding: 20,
-    backgroundColor: "#fff",
-  },
-  header: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-    textAlign: "center",
-  },
-  input: {
-    height: 50,
-    borderColor: "#ccc",
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 10,
-    marginBottom: 10,
-  },
-  errorInput: {
-    borderColor: "red",
-  },
-  errorText: {
-    color: "red",
-    marginBottom: 10,
-  },
-});
-
 export default SignUp;
+
